@@ -20,14 +20,6 @@
 
 <svelte:document onkeydown={handleKeydown} />
 
-<svelte:head>
-  <title>Search NixOS - Find Options &amp; Packages</title>
-  <meta
-    name="description"
-    content="A simple search engine for NixOS, Nixpkgs, Home Manager, NUR (Nix User Repository) and Nix-Darwin. Find options, packages, modules, and more effortlessly."
-  />
-</svelte:head>
-
 <nav class="w-full h-24 border-b px-8 py-4 flex justify-between items-center">
   <div class="w-10">
     <svg

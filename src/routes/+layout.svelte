@@ -19,6 +19,32 @@
   });
 </script>
 
+<svelte:head>
+  <title>Search NixOS - Find Options &amp; Packages</title>
+  <meta
+    name="description"
+    content="A simple search engine for NixOS, Nixpkgs, Home Manager, NUR (Nix User Repository) and Nix-Darwin. Find options, packages, modules, and more effortlessly."
+  />
+
+  <meta
+    property="og:image"
+    content="https://search-nixos.hadi.diy/og-banner.png"
+  />
+  <meta property="og:url" content="https://search-nixos.hadi.diy" />
+  <meta property="og:type" content="website" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Search NixOS - Informations" />
+  <meta
+    name="twitter:description"
+    content="Find options, packages, modules, and more effortlessly."
+  />
+  <meta
+    name="twitter:image"
+    content="https://search-nixos.hadi.diy/og-banner.png"
+  />
+</svelte:head>
+
 <Toaster />
 <ModeWatcher />
 <div class="flex flex-col min-h-screen">

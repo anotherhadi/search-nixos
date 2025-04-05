@@ -1,3 +1,7 @@
+<div align="center">
+    <img src="https://raw.githubusercontent.com/anotherhadi/search-nixos/main/src/static/logo.png" width="120px" />
+</div>
+
 # Search NixOS
 
 A lightweight search engine for NixOS, Nixpkgs, Home Manager, Nix-darwin, and NUR.
