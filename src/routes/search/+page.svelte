@@ -220,7 +220,7 @@
             <div class="px-4 py-4 border-b">
               <div class="flex justify-start items-center gap-2">
                 <p
-                  class="text-xl text-primary font-semibold p-0 m-0 whitespace-break-spaces overflow-x-auto"
+                  class="text-xl text-primary font-semibold p-0 m-0 break-all [overflow-wrap:anywhere]"
                 >
                   <a href="/{result.name}">
                     {result.name}
