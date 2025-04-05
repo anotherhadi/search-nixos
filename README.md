@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="https://raw.githubusercontent.com/anotherhadi/search-nixos/main/src/static/logo.png" width="120px" />
+    <img src="https://raw.githubusercontent.com/anotherhadi/search-nixos/main/static/logo.png" width="120px" />
 </div>
 
 # Search NixOS
