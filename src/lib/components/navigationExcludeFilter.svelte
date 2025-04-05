@@ -18,5 +18,7 @@
     { label: "Home Manager", value: "homemanager" },
     { label: "Nixpkgs", value: "nixpkgs" },
     { label: "Nixos", value: "nixos" },
+    { label: "NUR", value: "nur" },
+    { label: "Nix Darwin", value: "darwin" },
   ]}
 />
