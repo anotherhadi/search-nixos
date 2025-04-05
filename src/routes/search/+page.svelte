@@ -22,7 +22,7 @@
   let totalPages: number = $state(0);
   let loading: boolean = $state(false);
 
-  async function OnSend() {
+  async function OnSend({ resetPage = true }: { resetPage?: boolean } = {}) {
     if ($searchText === "") {
       return;
     }
@@ -42,6 +42,9 @@
     }
     if (!isNaN(perPage) && perPage !== 20) {
       url += "&perPage=" + perPage;
+    }
+    if (resetPage) {
+      page = 1;
     }
     await axios
       .get(url)
@@ -149,7 +152,9 @@
             disabled={page === 1}
             onclick={() => {
               page = 1;
-              OnSend();
+              OnSend({
+                resetPage: false,
+              });
             }}
           >
             <ChevronsLeft />
@@ -161,7 +166,9 @@
             disabled={page === 1}
             onclick={() => {
               page -= 1;
-              OnSend();
+              OnSend({
+                resetPage: false,
+              });
             }}
           >
             <ChevronLeft />
@@ -178,7 +185,9 @@
             disabled={page === totalPages}
             onclick={() => {
               page += 1;
-              OnSend();
+              OnSend({
+                resetPage: false,
+              });
             }}
           >
             <ChevronRight />
@@ -191,7 +200,9 @@
             disabled={page === totalPages}
             onclick={() => {
               page = totalPages;
-              OnSend();
+              OnSend({
+                resetPage: false,
+              });
             }}
           >
             <ChevronsRight />
@@ -251,7 +262,9 @@
             disabled={page === 1}
             onclick={() => {
               page = 1;
-              OnSend();
+              OnSend({
+                resetPage: false,
+              });
             }}
           >
             <ChevronsLeft />
@@ -263,7 +276,9 @@
             disabled={page === 1}
             onclick={() => {
               page -= 1;
-              OnSend();
+              OnSend({
+                resetPage: false,
+              });
             }}
           >
             <ChevronLeft />
@@ -280,7 +295,9 @@
             disabled={page === totalPages}
             onclick={() => {
               page += 1;
-              OnSend();
+              OnSend({
+                resetPage: false,
+              });
             }}
           >
             <ChevronRight />
@@ -293,7 +310,9 @@
             disabled={page === totalPages}
             onclick={() => {
               page = totalPages;
-              OnSend();
+              OnSend({
+                resetPage: false,
+              });
             }}
           >
             <ChevronsRight />
