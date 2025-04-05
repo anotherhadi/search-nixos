@@ -1,34 +1,9 @@
 <script lang="ts">
-  import axios from "axios";
-  import { onMount } from "svelte";
   import { searchText, excludeSource } from "$lib/stores/search";
   import { replaceState } from "$app/navigation";
   import { Search } from "@lucide/svelte";
   import Input from "$lib/components/ui/input/input.svelte";
   import Button from "$lib/components/ui/button/button.svelte";
-
-  let nOptions: number = $state(0);
-  let nPackages: number = $state(0);
-  let data: any = $state(null);
-
-  onMount(async () => {
-    axios
-      .get("https://search-nixos-api.hadi.diy/stats")
-      .then((response) => {
-        if (response.status === 200) {
-          nOptions =
-            parseInt(response.data["nixos-length"]) +
-            parseInt(response.data["homemanager-length"]);
-          nPackages = parseInt(response.data["nixpkgs-length"]);
-          data = response.data;
-        } else {
-          console.error("Error fetching data:", response.statusText);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  });
 
   function handleKeydown(e: KeyboardEvent) {
     if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
@@ -49,7 +24,7 @@
   <title>Search NixOS - Find Options &amp; Packages</title>
   <meta
     name="description"
-    content="A simple search engine for NixOS, Nixpkgs, Home Manager and more. Find options, packages, modules, and more effortlessly."
+    content="A simple search engine for NixOS, Nixpkgs, Home Manager, NUR (Nix User Repository) and Nix-Darwin. Find options, packages, modules, and more effortlessly."
   />
 </svelte:head>
 
@@ -104,10 +79,11 @@
 
 <main class="w-full h-full flex-1 flex justify-center items-center max-w-xl">
   <h1 class="mb-1">Search NixOS</h1>
-  <p class="text-center mb-2">
+  <p class="text-center mb-2 text-sm">
     A simple search engine for <strong>NixOS</strong>, <strong>Nixpkgs</strong>,
-    <strong>Home Manager</strong> and more. Find options, packages, modules, and
-    more effortlessly.
+    <strong>Home Manager</strong>, <strong>NUR</strong> (Nix User Repository)
+    and <strong>Nix-Darwin</strong>. Find options, packages, modules, and more
+    effortlessly.
   </p>
   <form
     onsubmit={() => {

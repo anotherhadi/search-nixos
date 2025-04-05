@@ -28,7 +28,7 @@
   <footer
     class="w-full h-24 border-t px-8 py-4 justify-center md:justify-between items-center flex md:flex-row flex-col"
   >
-    <p class="flex gap-2 items-center">
+    <p class="flex gap-1 items-center">
       <Github size={16} class="mr-2" /> Open Source app, check the
       <a href="https://github.com/anotherhadi/search-nixos">code here</a>
     </p>
