@@ -1,9 +1,9 @@
 <script lang="ts">
   import { replaceState } from "$app/navigation";
+    import Navigation from "$lib/components/navigation.svelte";
   import { excludeSource, searchText } from "$lib/stores/search";
   import axios from "axios";
   import { onMount } from "svelte";
-  import Navigation from "../navigation.svelte";
 
   let nOptions: number = $state(0);
   let nPackages: number = $state(0);
@@ -17,10 +17,11 @@
         if (response.status === 200) {
           nOptions =
             parseInt(response.data["nixos-length"]) +
-            parseInt(response.data["hm-length"]) + 
-            parseInt(response.data["darwin-length"])
-          nPackages = parseInt(response.data["nixpkgs-length"])
-          + parseInt(response.data["nur-length"]) 
+            parseInt(response.data["hm-length"]) +
+            parseInt(response.data["darwin-length"]);
+          nPackages =
+            parseInt(response.data["nixpkgs-length"]) +
+            parseInt(response.data["nur-length"]);
           lastUpdated = response.data["last-updated"];
           version = response.data["version"];
         } else {
@@ -47,7 +48,7 @@
   <h1 class="mb-0">Search NixOS - Informations</h1>
   <p class="text-sm mb-6 text-muted-foreground">
     Version {version !== "" ? version : "Loading..."}
-    <br/>Last updated {lastUpdated !== "" ? lastUpdated : "Loading..."}
+    <br />Last updated {lastUpdated !== "" ? lastUpdated : "Loading..."}
   </p>
   <p class="text-lg">
     A simple search engine for <strong>NixOS</strong>, <strong>Nixpkgs</strong>,
