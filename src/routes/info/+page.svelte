@@ -7,7 +7,8 @@
 
   let nOptions: number = $state(0);
   let nPackages: number = $state(0);
-  let data: any = $state(null);
+  let lastUpdated: string = $state("");
+  let version: string = $state("");
 
   onMount(async () => {
     axios
@@ -16,9 +17,12 @@
         if (response.status === 200) {
           nOptions =
             parseInt(response.data["nixos-length"]) +
-            parseInt(response.data["homemanager-length"]);
-          nPackages = parseInt(response.data["nixpkgs-length"]);
-          data = response.data;
+            parseInt(response.data["hm-length"]) + 
+            parseInt(response.data["darwin-length"])
+          nPackages = parseInt(response.data["nixpkgs-length"])
+          + parseInt(response.data["nur-length"]) 
+          lastUpdated = response.data["last-updated"];
+          version = response.data["version"];
         } else {
           console.error("Error fetching data:", response.statusText);
         }
@@ -42,12 +46,14 @@
 <main class="gap-0">
   <h1 class="mb-0">Search NixOS - Informations</h1>
   <p class="text-sm mb-6 text-muted-foreground">
-    Version {data && data.version ? data.version : "Loading..."}, last updated
-    {data && data.datetime ? data.datetime : "Loading..."}
+    Version {version !== "" ? version : "Loading..."}
+    <br/>Last updated {lastUpdated !== "" ? lastUpdated : "Loading..."}
   </p>
   <p class="text-lg">
-    A simple search engine for NixOS, Nixpkgs, Home Manager and more. Find
-    options, packages, modules, and more effortlessly.
+    A simple search engine for <strong>NixOS</strong>, <strong>Nixpkgs</strong>,
+    <strong>Home Manager</strong>, <strong>NUR</strong> (Nix User Repository)
+    and <strong>Nix-Darwin</strong>. Find options, packages, modules, and more
+    effortlessly.
   </p>
 
   <p class="flex items-center gap-1">
