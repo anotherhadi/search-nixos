@@ -26,13 +26,15 @@
     {@render children?.()}
   </div>
   <footer
-    class="w-full h-24 border-t px-8 py-4 justify-center md:justify-between items-center flex md:flex-row flex-col"
+    class="w-full h-24 border-t px-8 py-4 justify-center md:justify-between items-center flex md:flex-row flex-col gap-2"
   >
-    <p class="flex gap-1 items-center">
+    <p class="flex gap-1 items-center text-sm md:text-base">
       <Github size={16} class="mr-2" /> Open Source app, check the
       <a href="https://github.com/anotherhadi/search-nixos">code here</a>
     </p>
-    <p class="flex gap-4 items-center text-center justify-center">
+    <p
+      class="flex gap-4 items-center text-center justify-center text-sm md:text-base"
+    >
       <a href="https://github.com/anotherhadi/search-nixos-api" target="_blank">
         API
       </a>

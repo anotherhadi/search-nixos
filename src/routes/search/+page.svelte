@@ -8,7 +8,12 @@
   import { searchText, excludeSource } from "$lib/stores/search";
   import { replaceState } from "$app/navigation";
   import Navigation from "$lib/components/navigation.svelte";
-    import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "@lucide/svelte";
+  import {
+    ChevronLeft,
+    ChevronRight,
+    ChevronsLeft,
+    ChevronsRight,
+  } from "@lucide/svelte";
 
   let results: any[] = $state([]);
   let page: number = $state(1);
@@ -114,58 +119,71 @@
         <p class="text-muted-foreground">No results found</p>
       </div>
     {:else}
-
-      <div class="w-full h-10 flex justify-between items-center">
-      <p class="text-muted-foreground ml-4">
+      <div
+        class="w-full my-2 flex justify-between items-center flex-wrap gap-2"
+      >
+        <p class="text-muted-foreground ml-4">
           {results.length} of
-        {total}
-        {total<= 1 ? "result" : "results"}
-      </p>
-      <div class="flex justify-center items-center gap-2 mr-4">
-        <Button
-          variant="ghost"
+          {total}
+          {total <= 1 ? "result" : "results"}
+        </p>
+        <div class="justify-center items-center gap-2 mr-4 md:flex hidden">
+          <Button
+            variant="ghost"
             size="icon"
             class="h-7 w-7"
-          disabled={page === 1}
-          onclick={() => {page = 1; OnSend()}}
-        >
-          <ChevronsLeft />
-        </Button>
-        <Button
-          variant="ghost"
+            disabled={page === 1}
+            onclick={() => {
+              page = 1;
+              OnSend();
+            }}
+          >
+            <ChevronsLeft />
+          </Button>
+          <Button
+            variant="ghost"
             size="icon"
             class="h-7 w-7"
-          disabled={page === 1}
-          onclick={() => {page -= 1; OnSend()}}
-        >
-          <ChevronLeft />
-        </Button>
+            disabled={page === 1}
+            onclick={() => {
+              page -= 1;
+              OnSend();
+            }}
+          >
+            <ChevronLeft />
+          </Button>
 
           <p class="text-sm text-muted-foreground">
             Page {page} of {totalPages}
-            </p>
+          </p>
 
-        <Button
-          variant="ghost"
+          <Button
+            variant="ghost"
             size="icon"
             class="h-7 w-7"
-          disabled={page === totalPages}
-          onclick={() => {page += 1; OnSend()}}
-        >
-          <ChevronRight />
-        </Button>
+            disabled={page === totalPages}
+            onclick={() => {
+              page += 1;
+              OnSend();
+            }}
+          >
+            <ChevronRight />
+          </Button>
 
-        <Button
-          variant="ghost"
+          <Button
+            variant="ghost"
             size="icon"
             class="h-7 w-7"
-          disabled={page === totalPages}
-          onclick={() => {page = totalPages; OnSend()}}
-        >
-          <ChevronsRight />
-        </Button>
+            disabled={page === totalPages}
+            onclick={() => {
+              page = totalPages;
+              OnSend();
+            }}
+          >
+            <ChevronsRight />
+          </Button>
+        </div>
       </div>
-  </div>
       <div class="border rounded">
         {#each results as result}
           <div
@@ -176,7 +194,9 @@
           >
             <div class="px-4 py-4 border-b">
               <div class="flex justify-start items-center gap-2">
-                <p class="text-xl text-primary font-semibold p-0 m-0">
+                <p
+                  class="text-xl text-primary font-semibold p-0 m-0 whitespace-break-spaces overflow-x-auto"
+                >
                   <a href="/{result.name}">
                     {result.name}
                   </a>
@@ -201,57 +221,71 @@
         {/each}
       </div>
 
-      <div class="w-full h-10 flex justify-between items-center">
-      <p class="text-muted-foreground ml-4">
+      <div
+        class="w-full my-2 flex justify-between items-center flex-wrap gap-2"
+      >
+        <p class="text-muted-foreground ml-4">
           {results.length} of
-        {total}
-        {total<= 1 ? "result" : "results"}
-      </p>
-      <div class="flex justify-center items-center gap-2 mr-4">
-        <Button
-          variant="ghost"
+          {total}
+          {total <= 1 ? "result" : "results"}
+        </p>
+        <div class="justify-center items-center gap-2 mr-4 flex">
+          <Button
+            variant="ghost"
             size="icon"
             class="h-7 w-7"
-          disabled={page === 1}
-          onclick={() => {page = 1; OnSend()}}
-        >
-          <ChevronsLeft />
-        </Button>
-        <Button
-          variant="ghost"
+            disabled={page === 1}
+            onclick={() => {
+              page = 1;
+              OnSend();
+            }}
+          >
+            <ChevronsLeft />
+          </Button>
+          <Button
+            variant="ghost"
             size="icon"
             class="h-7 w-7"
-          disabled={page === 1}
-          onclick={() => {page -= 1; OnSend()}}
-        >
-          <ChevronLeft />
-        </Button>
+            disabled={page === 1}
+            onclick={() => {
+              page -= 1;
+              OnSend();
+            }}
+          >
+            <ChevronLeft />
+          </Button>
 
           <p class="text-sm text-muted-foreground">
             Page {page} of {totalPages}
-            </p>
+          </p>
 
-        <Button
-          variant="ghost"
+          <Button
+            variant="ghost"
             size="icon"
             class="h-7 w-7"
-          disabled={page === totalPages}
-          onclick={() => {page += 1; OnSend()}}
-        >
-          <ChevronRight />
-        </Button>
+            disabled={page === totalPages}
+            onclick={() => {
+              page += 1;
+              OnSend();
+            }}
+          >
+            <ChevronRight />
+          </Button>
 
-        <Button
-          variant="ghost"
+          <Button
+            variant="ghost"
             size="icon"
             class="h-7 w-7"
-          disabled={page === totalPages}
-          onclick={() => {page = totalPages; OnSend()}}
-        >
-          <ChevronsRight />
-        </Button>
+            disabled={page === totalPages}
+            onclick={() => {
+              page = totalPages;
+              OnSend();
+            }}
+          >
+            <ChevronsRight />
+          </Button>
+        </div>
       </div>
-  </div>
     {/if}
   </div>
 </main>

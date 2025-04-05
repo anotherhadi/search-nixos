@@ -1,6 +1,6 @@
 <script lang="ts">
   import { replaceState } from "$app/navigation";
-    import Navigation from "$lib/components/navigation.svelte";
+  import Navigation from "$lib/components/navigation.svelte";
   import { excludeSource, searchText } from "$lib/stores/search";
   import axios from "axios";
   import { onMount } from "svelte";
@@ -50,25 +50,25 @@
     Version {version !== "" ? version : "Loading..."}
     <br />Last updated {lastUpdated !== "" ? lastUpdated : "Loading..."}
   </p>
-  <p class="text-lg">
+  <p class="md:text-lg mb-2">
     A simple search engine for <strong>NixOS</strong>, <strong>Nixpkgs</strong>,
     <strong>Home Manager</strong>, <strong>NUR</strong> (Nix User Repository)
     and <strong>Nix-Darwin</strong>. Find options, packages, modules, and more
     effortlessly.
   </p>
 
-  <p class="flex items-center gap-1">
+  <p class="">
     Search through
     {#if nOptions > 0}
       <strong>{nOptions}</strong>
     {:else}
-      <span class="bg-muted animate-pulse rounded-md w-14 h-4"></span>
+      <span class="text-muted-foreground animate-pulse">???????</span>
     {/if}
     options and
     {#if nPackages > 0}
       <strong>{nPackages}</strong>
     {:else}
-      <span class="bg-muted animate-pulse rounded-md w-16 h-4"></span>
+      <span class="text-muted-foreground animate-pulse">??????</span>
     {/if}
     packages.
   </p>

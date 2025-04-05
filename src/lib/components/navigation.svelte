@@ -32,7 +32,7 @@
     class="w-full mx-auto max-w-7xl flex items-center flex-col justify-around h-full"
   >
     <div class="w-full flex items-center gap-4">
-      <Button href="/" variant="link" size="icon" class="p-0 [&_svg]:size-8">
+      <Button href="/" variant="link" size="icon" class="p-0 md:[&_svg]:size-8 [&_svg]:size-5">
         <svg
           class="fill-current text-foreground"
           viewBox="0 0 282 282"
@@ -90,7 +90,7 @@
             />
 
             <div
-              class="absolute right-0 top-0 w-10 h-10 flex justify-center items-center"
+              class="absolute right-0 top-0 w-10 h-10 md:flex justify-center items-center hidden"
             >
               <HoverCard.Root>
                 <HoverCard.Trigger>?</HoverCard.Trigger>

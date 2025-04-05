@@ -72,8 +72,8 @@
       />
     </svg>
   </div>
-  <p class="flex gap-4 items-center">
-    <a href="/info" target="_blank"> More Info </a>
+  <p class="flex gap-4 items-center text-sm md:text-base">
+    <a href="/info"> More Info </a>
   </p>
 </nav>
 

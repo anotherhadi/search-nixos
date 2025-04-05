@@ -37,20 +37,27 @@
 >
   <Popover.Trigger>
     {#snippet child({ props })}
-      <Button {...props} variant="outline" size="sm" class="h-6 border-dashed">
+      <Button
+        {...props}
+        variant="outline"
+        size="sm"
+        class="h-6 border-dashed max-w-full"
+      >
         <CirclePlus />
         {title}
         {#if selectedValues.length > 0}
-          <Separator orientation="vertical" class="mx-2 h-4" />
-          {#each selectedValues as selectedValue}
-            {#each options as option}
-              {#if option.value === selectedValue}
-                <Badge class="rounded-sm h-5 px-1 font-normal">
-                  {option.label}
-                </Badge>
-              {/if}
+          <div class="flex items-center gap-2 max-w-full overflow-x-auto">
+            <Separator orientation="vertical" class="mx-2 h-4" />
+            {#each selectedValues as selectedValue}
+              {#each options as option}
+                {#if option.value === selectedValue}
+                  <Badge class="rounded-sm h-5 px-1 font-normal">
+                    {option.label}
+                  </Badge>
+                {/if}
+              {/each}
             {/each}
-          {/each}
+          </div>
         {/if}
       </Button>
     {/snippet}
