@@ -96,6 +96,20 @@
       excludeSource.update(() => exclude.split(","));
     }
 
+    let perPageParam = urlParams.get("perPage") || "";
+    if (perPageParam.length > 0) {
+      if (!isNaN(parseInt(perPageParam))) {
+        perPage = parseInt(perPageParam);
+      }
+    }
+
+    let pageParam = urlParams.get("page") || "";
+    if (pageParam.length > 0) {
+      if (!isNaN(parseInt(pageParam))) {
+        page = parseInt(pageParam);
+      }
+    }
+
     OnSend();
   });
 </script>
