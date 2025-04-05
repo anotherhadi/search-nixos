@@ -37,10 +37,10 @@
     if ($excludeSource.length > 0) {
       url += "&exclude=" + $excludeSource.join(",");
     }
-    if (page > 1) {
+    if (!isNaN(page) && page > 1) {
       url += "&page=" + page;
     }
-    if (perPage !== 20) {
+    if (!isNaN(perPage) && perPage !== 20) {
       url += "&perPage=" + perPage;
     }
     await axios
