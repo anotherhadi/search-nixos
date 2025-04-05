@@ -4,12 +4,17 @@
   import { toast } from "svelte-sonner";
   import { onMount } from "svelte";
   import Button from "$lib/components/ui/button/button.svelte";
-  import Navigation from "../navigation.svelte";
   import Skeleton from "$lib/components/ui/skeleton/skeleton.svelte";
   import { searchText, excludeSource } from "$lib/stores/search";
   import { replaceState } from "$app/navigation";
+  import Navigation from "$lib/components/navigation.svelte";
+    import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "@lucide/svelte";
 
   let results: any[] = $state([]);
+  let page: number = $state(1);
+  let perPage: number = $state(20);
+  let total: number = $state(0);
+  let totalPages: number = $state(0);
   let loading: boolean = $state(false);
 
   async function OnSend() {
@@ -21,15 +26,29 @@
       return;
     }
     loading = true;
-    let url = "https://search-nixos-api.hadi.diy/search?q=" + $searchText;
+    let url =
+      "https://search-nixos-api.hadi.diy/search?q=" +
+      encodeURIComponent($searchText);
     if ($excludeSource.length > 0) {
       url += "&exclude=" + $excludeSource.join(",");
+    }
+    if (page > 1) {
+      url += "&page=" + page;
+    }
+    if (perPage !== 20) {
+      url += "&perPage=" + perPage;
     }
     await axios
       .get(url)
       .then((response) => {
         if (response.status === 200) {
-          results = response.data;
+          results = Array.isArray(response.data.results)
+            ? response.data.results
+            : [];
+          total = response.data.total;
+          page = response.data.page;
+          totalPages = response.data.totalPages;
+          perPage = response.data.perPage;
         } else {
           console.error("Error fetching data:", response.statusText);
           toast.error("Error fetching data: " + response.statusText);
@@ -95,10 +114,58 @@
         <p class="text-muted-foreground">No results found</p>
       </div>
     {:else}
+
+      <div class="w-full h-10 flex justify-between items-center">
       <p class="text-muted-foreground ml-4">
-        {results.length}
-        {results.length <= 1 ? "result" : "results"}
+          {results.length} of
+        {total}
+        {total<= 1 ? "result" : "results"}
       </p>
+      <div class="flex justify-center items-center gap-2 mr-4">
+        <Button
+          variant="ghost"
+            size="icon"
+            class="h-7 w-7"
+          disabled={page === 1}
+          onclick={() => {page = 1; OnSend()}}
+        >
+          <ChevronsLeft />
+        </Button>
+        <Button
+          variant="ghost"
+            size="icon"
+            class="h-7 w-7"
+          disabled={page === 1}
+          onclick={() => {page -= 1; OnSend()}}
+        >
+          <ChevronLeft />
+        </Button>
+
+          <p class="text-sm text-muted-foreground">
+            Page {page} of {totalPages}
+            </p>
+
+        <Button
+          variant="ghost"
+            size="icon"
+            class="h-7 w-7"
+          disabled={page === totalPages}
+          onclick={() => {page += 1; OnSend()}}
+        >
+          <ChevronRight />
+        </Button>
+
+        <Button
+          variant="ghost"
+            size="icon"
+            class="h-7 w-7"
+          disabled={page === totalPages}
+          onclick={() => {page = totalPages; OnSend()}}
+        >
+          <ChevronsRight />
+        </Button>
+      </div>
+  </div>
       <div class="border rounded">
         {#each results as result}
           <div
@@ -133,6 +200,58 @@
           </div>
         {/each}
       </div>
+
+      <div class="w-full h-10 flex justify-between items-center">
+      <p class="text-muted-foreground ml-4">
+          {results.length} of
+        {total}
+        {total<= 1 ? "result" : "results"}
+      </p>
+      <div class="flex justify-center items-center gap-2 mr-4">
+        <Button
+          variant="ghost"
+            size="icon"
+            class="h-7 w-7"
+          disabled={page === 1}
+          onclick={() => {page = 1; OnSend()}}
+        >
+          <ChevronsLeft />
+        </Button>
+        <Button
+          variant="ghost"
+            size="icon"
+            class="h-7 w-7"
+          disabled={page === 1}
+          onclick={() => {page -= 1; OnSend()}}
+        >
+          <ChevronLeft />
+        </Button>
+
+          <p class="text-sm text-muted-foreground">
+            Page {page} of {totalPages}
+            </p>
+
+        <Button
+          variant="ghost"
+            size="icon"
+            class="h-7 w-7"
+          disabled={page === totalPages}
+          onclick={() => {page += 1; OnSend()}}
+        >
+          <ChevronRight />
+        </Button>
+
+        <Button
+          variant="ghost"
+            size="icon"
+            class="h-7 w-7"
+          disabled={page === totalPages}
+          onclick={() => {page = totalPages; OnSend()}}
+        >
+          <ChevronsRight />
+        </Button>
+      </div>
+  </div>
     {/if}
   </div>
 </main>
