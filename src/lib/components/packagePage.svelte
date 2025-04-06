@@ -32,18 +32,25 @@
       );
       if (status === 200) {
         opt = data;
-        const platformMap: any = {
-          Darwin: "darwin",
-          Linux: "linux",
-          Windows: "windows",
-          FreeBSD: "freebsd",
-          Cygwin: "cygwin",
-        };
-        platform = Object.keys(platformMap).filter((p) =>
-          opt.meta.platforms.some((item: string) =>
-            item.endsWith(platformMap[p]),
-          ),
-        );
+
+        if (Array.isArray(opt.meta.platforms)) {
+          const platformMap: any = {
+            Darwin: "darwin",
+            Linux: "linux",
+            Windows: "windows",
+            FreeBSD: "freebsd",
+            Cygwin: "cygwin",
+          };
+
+          platform = Object.keys(platformMap).filter((p) =>
+            opt.meta.platforms!.some((item: string) =>
+              item.endsWith(platformMap[p]),
+            ),
+          );
+        } else {
+          platform = [];
+        }
+
         loading = false;
       }
     } catch (error) {
@@ -222,7 +229,7 @@
               </div>
             {/if}
 
-            {#if platform.length}
+            {#if platform.length > 0}
               <div>
                 <h4>Platforms</h4>
                 <div class="flex flex-wrap gap-2 ml-4">
@@ -241,17 +248,18 @@
                     <ChevronsUpDown size={16} />
                     Show all</Collapsible.Trigger
                   >
+
                   <Collapsible.Content>
-                    {#if opt.meta.platforms.length > 0}
-                      <div class="flex flex-col gap-1 ml-4">
-                        {#each opt.meta.platforms as item}
-                          <p>{item}</p>
-                        {/each}
-                      </div>
-                    {/if}
-                  </Collapsible.Content>
-                </Collapsible.Root>
+                    <div class="flex flex-col gap-1 ml-4">
+                      {#each opt.meta.platforms as item}
+                        <p>{item}</p>
+                      {/each}
+                    </div>
+                 </Collapsible.Content>
+               </Collapsible.Root>
               </div>
+            {:else}
+              <p class="ml-4 text-sm text-gray-500 italic">No platforms listed.</p>
             {/if}
           </div>
         </div>
