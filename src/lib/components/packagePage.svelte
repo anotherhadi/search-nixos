@@ -201,7 +201,7 @@
               </div>
             {/if}
 
-            {#if opt.meta.maintainers.length}
+            {#if Array.isArray(opt.meta.maintainers) && opt.meta.maintainers.length}
               <div>
                 <h4>Maintainers</h4>
                 <p class="flex flex-col gap-1 ml-4">
@@ -214,6 +214,11 @@
                     >
                   {/each}
                 </p>
+              </div>
+            {:else}
+              <div>
+                <h4>Maintainers</h4>
+                <p class="ml-4 text-sm text-gray-500 italic">No maintainers listed.</p>
               </div>
             {/if}
 
