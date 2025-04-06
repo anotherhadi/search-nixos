@@ -34,7 +34,7 @@
   <meta property="og:type" content="website" />
 
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Search NixOS - Informations" />
+  <meta name="twitter:title" content="Search NixOS - Find Options & Packages" />
   <meta
     name="twitter:description"
     content="Find options, packages, modules, and more effortlessly."
