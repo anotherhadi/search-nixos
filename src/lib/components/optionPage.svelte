@@ -48,7 +48,7 @@
 />
 <main>
   <div>
-    <header class="mb-6 flex flex-col gap-1">
+    <header class="mb-6 flex flex-col gap-2">
       {#if loading}
         <div>
           <Badge variant="outline" class="text-primary">option</Badge>
@@ -64,6 +64,25 @@
           <Button variant="ghost"><Link /></Button>
         </div>
       {:else}
+        <p class="flex gap-1 flex-wrap items-center">
+          <a href="/search">search</a>
+          <span class="text-muted-foreground">/</span>
+          {#each q.split(".") as option, i}
+            {#if i !== q.split(".").length - 1}
+              <a
+                href={`/search?q=^${q
+                  .split(".")
+                  .slice(0, i + 1)
+                  .join(".")}.`}
+              >
+                {option}
+              </a>
+              <span class="text-muted-foreground">/</span>
+            {:else}
+              <span class="text-muted-foreground">{option}</span>
+            {/if}
+          {/each}
+        </p>
         <div>
           <Badge variant="outline" class="text-primary">option</Badge>
         </div>
