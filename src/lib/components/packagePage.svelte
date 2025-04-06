@@ -21,7 +21,8 @@
   let prefix: string = $state("");
   let q: string = $state("");
   let platform: string[] = $state([]);
-  let badges: { label: string, variant: string }[] = $state([]);
+  let licenses_badges: { label: string, variant: string }[] = $state([]);
+  let broken: boolean = $state(false);
 
   onMount(async () => {
     const path = window.location.pathname.split("/");
@@ -52,8 +53,8 @@
           platform = [];
         }
 
-        badges = [
-          opt.meta?.broken && { label: "Broken", variant: "destructive" },
+        broken = opt.meta?.broken;
+        licenses_badges = [
           opt.meta?.unfree && { label: "Unfree", variant: "destructive" },
           ...(Array.isArray(opt.meta?.license)
             ? opt.meta.license
@@ -137,6 +138,11 @@
           <p class="font-bold text-muted-foreground mb-4">Informations</p>
 
           <div class="flex flex-col gap-4">
+            {#if broken}
+              <div class="border border-red-400 text-red-700 dark:text-red-400 px-4 py-3 rounded relative" role="alert"> 
+                <p class="block">This package has been reported as broken.</p>
+              </div>
+            {/if}
             {#if opt.meta.longDescription || opt.meta.description}
               <div>
                 <h4>Description</h4>
@@ -205,9 +211,10 @@
           <p class="font-bold text-muted-foreground mb-4">Meta</p>
 
           <div class="flex flex-col gap-4">
-            {#if badges.length}
+            {#if licenses_badges.length}
               <div class="flex gap-2 flex-wrap">
-                {#each badges as { label, variant }}
+                <span class="block inline">License{licenses_badges.length > 1 ? 's' : ''}</span>
+                {#each licenses_badges as { label, variant }}
                   <Badge variant={variant}>{label}</Badge>
                 {/each}
               </div>
