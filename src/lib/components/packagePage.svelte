@@ -21,6 +21,7 @@
   let prefix: string = $state("");
   let q: string = $state("");
   let platform: string[] = $state([]);
+  let badges: { label: string, variant: string }[] = $state([]);
 
   onMount(async () => {
     const path = window.location.pathname.split("/");
@@ -50,6 +51,19 @@
         } else {
           platform = [];
         }
+
+        badges = [
+          opt.meta?.broken && { label: "Broken", variant: "destructive" },
+          opt.meta?.unfree && { label: "Unfree", variant: "destructive" },
+          ...(Array.isArray(opt.meta?.license)
+            ? opt.meta.license
+              .filter(({ spdxId }) => spdxId && spdxId.length)
+              .map(({ spdxId }) => ({
+                label: spdxId,
+                variant: "outline",
+              }))
+          : []),
+        ].filter(Boolean);
 
         loading = false;
       }
@@ -191,15 +205,13 @@
           <p class="font-bold text-muted-foreground mb-4">Meta</p>
 
           <div class="flex flex-col gap-4">
-            <div class="flex gap-2 flex-wrap">
-              {#if opt.meta.broken}<Badge variant="destructive">Broken</Badge
-                >{/if}
-              {#if opt.meta.unfree}<Badge variant="destructive">Unfree</Badge
-                >{/if}
-              {#each opt.meta.license as { spdxId }}
-                <Badge variant="outline">{spdxId}</Badge>
-              {/each}
-            </div>
+            {#if badges.length}
+              <div class="flex gap-2 flex-wrap">
+                {#each badges as { label, variant }}
+                  <Badge variant={variant}>{label}</Badge>
+                {/each}
+              </div>
+            {/if}
 
             {#if opt.version}
               <div>
