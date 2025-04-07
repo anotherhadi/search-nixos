@@ -18,6 +18,7 @@
   } from '@lucide/svelte'
   import { API_URL, DEBUG } from '$lib/vars'
   import Badge from '$lib/components/ui/badge/badge.svelte'
+  import BadgeCustom from '$lib/components/badge-custom.svelte'
 
   let results: any[] = $state([])
   let page: number = $state(1)
@@ -286,30 +287,8 @@
                     {/if}
                   </div>
                   <div>
-                    <Badge
-                      variant="outline"
-                      class={result.Source === 'home-manager'
-                        ? 'text-green-500'
-                        : result.Source === 'nixpkgs'
-                          ? 'text-cyan-500'
-                          : result.Source === 'nixos'
-                            ? 'text-red-500'
-                            : result.Source === 'nur'
-                              ? 'text-orange-500'
-                              : result.Source === 'darwin'
-                                ? 'text-yellow-500'
-                                : ''}
-                    >
-                      {result.Source}
-                    </Badge>
-                    <Badge
-                      variant="outline"
-                      class={result.Type === 'option'
-                        ? 'text-blue-500'
-                        : 'text-orange-500'}
-                    >
-                      {result.Type}
-                    </Badge>
+                    <BadgeCustom name={result.Source} />
+                    <BadgeCustom name={result.Type} />
                   </div>
                 </div>
               </div>
