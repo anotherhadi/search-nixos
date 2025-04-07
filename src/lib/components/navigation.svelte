@@ -1,22 +1,18 @@
 <script lang="ts">
-  import Input from "$lib/components/ui/input/input.svelte";
-  import Search from "@lucide/svelte/icons/search";
-  import Sun from "@lucide/svelte/icons/sun";
-  import Moon from "@lucide/svelte/icons/moon";
-  import { toggleMode } from "mode-watcher";
-  import Button from "$lib/components/ui/button/button.svelte";
-  import { searchText } from "$lib/stores/search";
-  import NavigationExcludeFilter from "$lib/components/navigationExcludeFilter.svelte";
-  import * as HoverCard from "$lib/components/ui/hover-card/index.js";
+  import Input from '$lib/components/ui/input/input.svelte'
+  import Search from '@lucide/svelte/icons/search'
+  import Button from '$lib/components/ui/button/button.svelte'
+  import { searchText } from '$lib/stores/search'
+  import { Cog, Info } from '@lucide/svelte'
 
-  let { onSend = $bindable() } = $props();
+  let { onSend = $bindable() } = $props()
 
   function handleKeydown(e: KeyboardEvent) {
-    if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
-      e.preventDefault();
-      const input = document.querySelector("#search-input") as HTMLInputElement;
+    if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+      e.preventDefault()
+      const input = document.querySelector('#search-input') as HTMLInputElement
       if (input) {
-        input.focus();
+        input.focus()
       }
     }
   }
@@ -32,7 +28,12 @@
     class="w-full mx-auto max-w-7xl flex items-center flex-col justify-around h-full"
   >
     <div class="w-full flex items-center gap-4">
-      <Button href="/" variant="link" size="icon" class="p-0 md:[&_svg]:size-8 [&_svg]:size-5">
+      <Button
+        href="/"
+        variant="link"
+        size="icon"
+        class="p-0 md:[&_svg]:size-8 [&_svg]:size-5"
+      >
         <svg
           class="fill-current text-foreground"
           viewBox="0 0 282 282"
@@ -88,47 +89,18 @@
               placeholder="Search ..."
               autofocus
             />
-
-            <div
-              class="absolute right-0 top-0 w-10 h-10 md:flex justify-center items-center hidden"
-            >
-              <HoverCard.Root>
-                <HoverCard.Trigger>?</HoverCard.Trigger>
-                <HoverCard.Content class="w-64 md:w-96">
-                  <p class="font-bold">Example Queries</p>
-                  <p>
-                    <code>kitty</code> - Search for kitty<br />
-                    <code>package kitty</code> - Search for the package kitty<br
-                    />
-                    <code>option services.xserver</code> - Search for the
-                    xserver option<br />
-                    <code>^tailscale</code> - Search for everything starting
-                    with tailscale<br />
-                    <code>option enable$</code> - Search for every option ending
-                    with enable<br />
-                    <code>kitty themes</code> - Search for everything containing
-                    kitty and themes<br />
-                  </p>
-                </HoverCard.Content>
-              </HoverCard.Root>
-            </div>
           </form>
         </div>
       </div>
 
-      <Button onclick={toggleMode} variant="link" size="icon">
-        <Sun
-          class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
-        />
-        <Moon
-          class="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
-        />
-        <span class="sr-only">Toggle theme</span>
-      </Button>
-    </div>
-
-    <div class="w-full flex justify-start pl-12 gap-5 items-center">
-      <NavigationExcludeFilter {onSend} />
+      <div class="flex gap-2">
+        <Button variant="ghost" href="/info" size="icon">
+          <Info />
+        </Button>
+        <Button variant="ghost" href="/settings" size="icon">
+          <Cog />
+        </Button>
+      </div>
     </div>
   </div>
 </nav>

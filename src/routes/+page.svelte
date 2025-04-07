@@ -1,18 +1,18 @@
 <script lang="ts">
-  import { searchText, excludeSource } from "$lib/stores/search";
-  import { replaceState } from "$app/navigation";
-  import { Search } from "@lucide/svelte";
-  import Input from "$lib/components/ui/input/input.svelte";
-  import Button from "$lib/components/ui/button/button.svelte";
+  import { searchText } from '$lib/stores/search'
+  import { replaceState } from '$app/navigation'
+  import { Search } from '@lucide/svelte'
+  import Input from '$lib/components/ui/input/input.svelte'
+  import Button from '$lib/components/ui/button/button.svelte'
 
   function handleKeydown(e: KeyboardEvent) {
-    if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
-      e.preventDefault();
+    if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+      e.preventDefault()
       const input = document.querySelector(
-        "#search-input-home",
-      ) as HTMLInputElement;
+        '#search-input-home',
+      ) as HTMLInputElement
       if (input) {
-        input.focus();
+        input.focus()
       }
     }
   }
@@ -79,12 +79,9 @@
   </p>
   <form
     onsubmit={() => {
-      const urlParams = new URLSearchParams(window.location.search);
-      urlParams.set("q", $searchText);
-      if ($excludeSource.length > 0) {
-        urlParams.set("exclude", $excludeSource.join(","));
-      }
-      replaceState("/search?" + urlParams.toString(), "");
+      const urlParams = new URLSearchParams(window.location.search)
+      urlParams.set('q', $searchText)
+      replaceState('/search?' + urlParams.toString(), '')
     }}
     class="w-full relative flex justify-center flex-col gap-5"
   >

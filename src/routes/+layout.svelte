@@ -1,22 +1,22 @@
 <script lang="ts">
-  import "../app.css";
-  import { ModeWatcher } from "mode-watcher";
-  import { Toaster } from "$lib/components/ui/sonner/index.js";
-  import { onNavigate } from "$app/navigation";
-  import { Github } from "@lucide/svelte";
+  import '../app.css'
+  import { ModeWatcher } from 'mode-watcher'
+  import { Toaster } from '$lib/components/ui/sonner/index.js'
+  import { onNavigate } from '$app/navigation'
+  import { Github } from '@lucide/svelte'
 
-  let { children } = $props();
+  let { children } = $props()
 
   onNavigate((navigation) => {
-    if (!document.startViewTransition) return;
+    if (!document.startViewTransition) return
 
     return new Promise((resolve) => {
       document.startViewTransition(async () => {
-        resolve();
-        await navigation.complete;
-      });
-    });
-  });
+        resolve()
+        await navigation.complete
+      })
+    })
+  })
 </script>
 
 <svelte:head>

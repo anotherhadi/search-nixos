@@ -1,312 +1,320 @@
 <script lang="ts">
-  import ChevronsUpDown from "@lucide/svelte/icons/chevrons-up-down";
-  import Package from "@lucide/svelte/icons/package";
-  import SquareCode from "@lucide/svelte/icons/square-code";
-  import Globe from "@lucide/svelte/icons/globe";
-  import Github from "@lucide/svelte/icons/github";
-  import Badge from "$lib/components/ui/badge/badge.svelte";
-  import * as Collapsible from "$lib/components/ui/collapsible/index.js";
-  import axios from "axios";
-  import { onMount } from "svelte";
-  import { toast } from "svelte-sonner";
-  import Navigation from "./navigation.svelte";
-  import { searchText, excludeSource } from "$lib/stores/search";
-  import { replaceState } from "$app/navigation";
-  import Codeblock from "./codeblock.svelte";
-  import Button from "./ui/button/button.svelte";
-  import { Link, Share } from "@lucide/svelte";
+  import ChevronsUpDown from '@lucide/svelte/icons/chevrons-up-down'
+  import * as Alert from '$lib/components/ui/alert/index.js'
+  import * as Avatar from '$lib/components/ui/avatar/index.js'
+  import Package from '@lucide/svelte/icons/package'
+  import SquareCode from '@lucide/svelte/icons/square-code'
+  import Globe from '@lucide/svelte/icons/globe'
+  import Github from '@lucide/svelte/icons/github'
+  import Badge from '$lib/components/ui/badge/badge.svelte'
+  import * as Collapsible from '$lib/components/ui/collapsible/index.js'
+  import axios from 'axios'
+  import { onMount } from 'svelte'
+  import { toast } from 'svelte-sonner'
+  import Navigation from './navigation.svelte'
+  import { searchText } from '$lib/stores/search'
+  import { replaceState } from '$app/navigation'
+  import Codeblock from './codeblock.svelte'
+  import { CircleAlert } from '@lucide/svelte'
+  import { API_URL, DEBUG } from '$lib/vars'
+  import { SiApple, SiFreebsd, SiLinux } from '@icons-pack/svelte-simple-icons'
+  import SkeletonText from './skeleton-text.svelte'
+  import BadgeCustom from './badge-custom.svelte'
+  import CopyUrl from './copy-url.svelte'
 
-  let loading: any = $state(true);
-  let opt: any = $state(null);
-  let prefix: string = $state("");
-  let q: string = $state("");
-  let platform: string[] = $state([]);
+  let prefix: string = $state('') // nixpkgs/package
+  let q: string = $state('') // kitty
+
+  let pkg: any = $state(null)
 
   onMount(async () => {
-    const path = window.location.pathname.split("/");
-    [prefix, q] = [path.slice(1, 3).join("/"), path[3]];
+    const path = window.location.pathname.split('/')
+    ;[prefix, q] = [path.slice(1, 3).join('/'), path[3]]
 
     try {
-      const { data, status } = await axios.get(
-        `https://search-nixos-api.hadi.diy/${prefix}/${q}`,
-      );
+      const { data, status } = await axios.get(`${API_URL}/${prefix}/${q}`)
       if (status === 200) {
-        opt = data;
-
-        if (Array.isArray(opt.meta.platforms)) {
-          const platformMap: any = {
-            Darwin: "darwin",
-            Linux: "linux",
-            Windows: "windows",
-            FreeBSD: "freebsd",
-            Cygwin: "cygwin",
-          };
-
-          platform = Object.keys(platformMap).filter((p) =>
-            opt.meta.platforms!.some((item: string) =>
-              item.endsWith(platformMap[p]),
-            ),
-          );
-        } else {
-          platform = [];
+        pkg = data
+        if (DEBUG) {
+          console.log(data)
         }
-
-        loading = false;
+      } else {
+        console.log(data)
+        throw new Error('status code: ' + status)
       }
     } catch (error) {
-      console.error("Error fetching data:", error);
-      toast.error(`Error fetching data: ${error}`);
+      console.error('Error fetching data:', error)
+      toast.error(`Error fetching data: ${error}`)
     }
-  });
+  })
 </script>
 
 <Navigation
   onSend={() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    urlParams.set("q", $searchText);
-    if ($excludeSource.length > 0) {
-      urlParams.set("exclude", $excludeSource.join(","));
-    }
-    replaceState("/search?" + urlParams.toString(), "");
+    const urlParams = new URLSearchParams(window.location.search)
+    urlParams.set('q', $searchText)
+    replaceState('/search?' + urlParams.toString(), '')
   }}
 />
+
 <main>
-  <div>
-    <header class="mb-6 flex flex-col gap-1">
-      {#if loading}
-        <div>
-          <Badge variant="outline" class="text-primary">package</Badge>
-        </div>
-        <div class="flex items-center justify-between flex-wrap gap-5">
-          <div class="flex justify-start items-center flex-wrap gap-2">
-            <span class="bg-muted animate-pulse rounded-md w-12 h-8"></span>
-            /
-            <span class="bg-muted animate-pulse rounded-md w-24 h-8"></span>
-            /
-            <span class="bg-muted animate-pulse rounded-md w-28 h-10"></span>
-          </div>
-          <Button variant="ghost"><Link /></Button>
-        </div>
+  <header class="flex flex-col gap-5">
+    <div class="flex gap-2 items-center">
+      {#if pkg}
+        <BadgeCustom name={pkg.source} />
       {:else}
-        <div>
-          <Badge variant="outline" class="text-primary">package</Badge>
-        </div>
-        <div class="flex items-center justify-between flex-wrap gap-5">
-          <div class="flex justify-start items-center flex-wrap gap-2">
-            <h2 class="text-muted-foreground select-none m-0 font-normal">
-              {prefix}/
-            </h2>
-            <h1 class="m-0 font-medium">{q}</h1>
-          </div>
-          <Button
-            variant="ghost"
-            onclick={() => {
-              navigator.clipboard.writeText(window.location.href).then(
-                () => {
-                  toast.success("Copied to clipboard");
-                },
-                (err) => {
-                  console.error("Could not copy text: ", err);
-                  toast.error("Error copying text: " + err);
-                },
-              );
-            }}><Link /></Button
-          >
-        </div>
+        <BadgeCustom name="-----" />
       {/if}
-    </header>
+      <BadgeCustom name="package" />
+    </div>
 
-    {#if loading === false && opt}
-      <div class="grid grid-cols-1 md:grid-cols-6 gap-2">
-        <!-- Left Box -->
-        <div class="rounded border p-4 col-span-6 md:col-span-4">
-          <p class="font-bold text-muted-foreground mb-4">Informations</p>
+    <div class="flex items-center justify-between flex-wrap gap-5 w-full">
+      <h1 class="m-0 mb-2 font-semibold break-all [overflow-wrap:anywhere]">
+        {#if q}
+          {q}
+        {:else}
+          <SkeletonText>tailscale</SkeletonText>
+        {/if}
+      </h1>
+      <CopyUrl />
+    </div>
+  </header>
 
-          <div class="flex flex-col gap-4">
-            {#if opt.meta.longDescription || opt.meta.description}
-              <div>
-                <h4>Description</h4>
-                <p class="ml-4">
-                  {opt.meta.longDescription || opt.meta.description}
-                </p>
-              </div>
-            {/if}
+  <div class="grid grid-cols-1 md:grid-cols-6 gap-5">
+    <!-- Left Box -->
+    <div class="rounded border col-span-6 md:col-span-4 px-6 py-4">
+      <div class="flex flex-col gap-4">
+        <p class="font-bold text-muted-foreground">Informations</p>
 
-            {#if opt.meta.homepage.length}
-              <div>
-                <h4>Homepage</h4>
-                <p class="ml-4">
-                  {#each opt.meta.homepage as item}
-                    <a
-                      href={item}
-                      target="_blank"
-                      class="flex gap-2 items-center"
-                      rel="noopener noreferrer"><Globe size={16} /> {item}</a
-                    >
-                  {/each}
-                </p>
-              </div>
-            {/if}
+        {#if pkg && pkg.broken}
+          <Alert.Root variant="destructive">
+            <CircleAlert class="size-4" />
+            <Alert.Title>Broken</Alert.Title>
+            <Alert.Description
+              >This package is currently broken and may not work as expected!
+            </Alert.Description>
+          </Alert.Root>
+        {/if}
 
-            {#if opt.meta.position}
-              <div>
-                <h4>Source</h4>
-                <p class="flex gap-2 flex-col ml-4">
-                  {#if prefix === "nur/package"}
-                    <a
-                      href={opt.meta.position}
-                      target="_blank"
-                      class="flex gap-2 items-center"
-                      rel="noopener noreferrer"
-                    >
-                      <SquareCode size={16} />
-                      {opt.meta.position}
-                    </a>
-                  {:else}
-                    <a
-                      href={`https://github.com/NixOS/nixpkgs/blob/nixos-unstable/${opt.meta.position.replace(":", "#L")}`}
-                      target="_blank"
-                      class="flex gap-2 items-center"
-                      rel="noopener noreferrer"
-                    >
-                      <SquareCode size={16} />
-                      {opt.meta.position.split(":")[0]}
-                    </a>
-                  {/if}
-                </p>
-              </div>
-            {/if}
+        {#if pkg && pkg.insecure}
+          <Alert.Root variant="destructive" class="border-orange-500">
+            <CircleAlert class="size-4 stroke-orange-500" />
+            <Alert.Title class="text-orange-500">Insecure</Alert.Title>
+            <Alert.Description class="text-orange-500"
+              >This package is currently marked as insecure!
+            </Alert.Description>
+          </Alert.Root>
+        {/if}
 
-            <div>
-              <h4>Nix Shell</h4>
-              <div class="h-8 flex items-stretch">
-                <Codeblock text={`nix-shell -p ${q}`} />
-              </div>
-            </div>
+        {#if pkg && (pkg.longDescription || pkg.description)}
+          <div>
+            <h4>Description</h4>
+            <p class="pl-4">
+              {pkg.longDescription || pkg.description}
+            </p>
           </div>
+        {:else}
+          <div>
+            <h4>Description</h4>
+            <p class="pl-4">
+              <SkeletonText
+                >Node agent for Tailscale, a mesh VPN built on WireGuard.</SkeletonText
+              >
+            </p>
+          </div>
+        {/if}
+
+        {#if pkg && pkg.homepages.length}
+          <div>
+            <h4>Homepage</h4>
+            <p class="pl-4">
+              {#each pkg.homepages as item}
+                <a
+                  href={item}
+                  target="_blank"
+                  class="flex gap-2 items-center"
+                  rel="noopener noreferrer"><Globe size={16} /> {item}</a
+                >
+              {/each}
+            </p>
+          </div>
+        {:else if !pkg}
+          <div>
+            <h4>Homepage</h4>
+            <p class="pl-4">
+              <SkeletonText>https://tailscale.com</SkeletonText>
+            </p>
+          </div>
+        {/if}
+
+        {#if pkg && pkg.position}
+          <div>
+            <h4>Source</h4>
+            <p class="flex gap-2 flex-col pl-4">
+              <a
+                href={pkg.positionUrl}
+                target="_blank"
+                class="flex gap-2 items-center"
+                rel="noopener noreferrer"
+              >
+                <SquareCode size={16} />
+                {pkg.position}
+              </a>
+            </p>
+          </div>
+        {:else if !pkg}
+          <div>
+            <h4>Source</h4>
+            <p class="pl-4">
+              <SkeletonText
+                >pkgs/by-name/ta/tailscale/package.nix:200</SkeletonText
+              >
+            </p>
+          </div>
+        {/if}
+
+        <div>
+          <h4>Nix Shell</h4>
+          {#if q}
+            <div class="flex items-stretch pl-4">
+              <Codeblock text={`nix-shell -p ${q}`} isShell />
+            </div>
+          {:else}
+            <div class="flex items-stretch pl-4">
+              <Codeblock text={`nix-shell -p ----`} />
+            </div>
+          {/if}
         </div>
 
-        <!-- Right Box -->
-        <div class="rounded border p-4 col-span-6 md:col-span-2">
-          <p class="font-bold text-muted-foreground mb-4">Meta</p>
-
-          <div class="flex flex-col gap-4">
-            <div class="flex gap-2 flex-wrap">
-              {#if opt.meta.broken}<Badge variant="destructive">Broken</Badge
-                >{/if}
-              {#if opt.meta.unfree}<Badge variant="destructive">Unfree</Badge
-                >{/if}
-              {#each opt.meta.license as { spdxId }}
-                <Badge variant="outline">{spdxId}</Badge>
+        {#if pkg && pkg.knownVulnerabilities.length}
+          <div>
+            <h4>Known Vulnerabilities</h4>
+            <div>
+              {#each pkg.knownVulnerabilities as item}
+                <Alert.Root variant="destructive">
+                  <CircleAlert class="size-4" />
+                  <Alert.Description class="text-wrap">{item}</Alert.Description
+                  >
+                </Alert.Root>
               {/each}
             </div>
+          </div>
+        {/if}
+      </div>
+    </div>
 
-            {#if opt.version}
-              <div>
-                <h4>Version</h4>
-                <p class="ml-4">v{opt.version}</p>
-              </div>
-            {/if}
+    <!-- Right Box -->
+    <div class="rounded border col-span-6 md:col-span-2 px-6 py-4">
+      <div class="flex flex-col gap-4">
+        <p class="font-bold text-muted-foreground">Meta</p>
 
-            {#if Array.isArray(opt.meta.maintainers) && opt.meta.maintainers.length}
-              <div>
-                <h4>Maintainers</h4>
-                <p class="flex flex-col gap-1 ml-4">
-                  {#each opt.meta.maintainers as { github, name }}
-                    <a
-                      href={`https://github.com/${github}`}
-                      target="_blank"
-                      class="flex gap-2 items-center"
-                      rel="noopener noreferrer"><Github size={16} /> {name}</a
-                    >
-                  {/each}
+        {#if pkg && (pkg.unfree || pkg.license)}
+          <div class="flex gap-2 flex-wrap">
+            {#if pkg.unfree}<Badge variant="destructive">Unfree</Badge>{/if}
+            {#each pkg.license as { spdxId }}
+              <Badge variant="outline">License: {spdxId}</Badge>
+            {/each}
+          </div>
+        {/if}
+
+        {#if pkg && pkg.version}
+          <div>
+            <h4>Version</h4>
+            <p class="pl-4">v{pkg.version}</p>
+          </div>
+        {:else if !pkg}
+          <div>
+            <h4>Version</h4>
+            <p class="pl-4">
+              <SkeletonText>v1.82.0</SkeletonText>
+            </p>
+          </div>
+        {/if}
+
+        {#if pkg && pkg.maintainers.length}
+          <div>
+            <h4>Maintainers</h4>
+            <div class="flex flex-col gap-1 pl-4">
+              {#each pkg.maintainers as { github, name }}
+                <p class="flex flex-wrap gap-2 items-center">
+                  <Avatar.Root class="w-5 h-5">
+                    <Avatar.Image
+                      src={`https://github.com/${github}.png`}
+                      alt={`@${name}`}
+                    />
+                    <Avatar.Fallback class="bg-transparent">
+                      <Github size={16} />
+                    </Avatar.Fallback>
+                  </Avatar.Root>
+                  <a
+                    href={`https://github.com/${github}`}
+                    target="_blank"
+                    class="flex gap-2 items-center"
+                    rel="noopener noreferrer">{name}</a
+                  >
                 </p>
-              </div>
-            {:else}
-              <div>
-                <h4>Maintainers</h4>
-                <p class="ml-4 text-sm text-gray-500 italic">No maintainers listed.</p>
-              </div>
-            {/if}
-
-            {#if platform.length > 0}
-              <div>
-                <h4>Platforms</h4>
-                <div class="flex flex-wrap gap-2 ml-4">
-                  <p class="flex flex-col gap-1">
-                    {#each platform as item}
-                      <span class="flex gap-2 items-center"
-                        ><Package size={16} /> {item}</span
-                      >
-                    {/each}
-                  </p>
-                </div>
-                <Collapsible.Root class="mt-4 ml-4">
-                  <Collapsible.Trigger
-                    class="flex gap-1 items-center text-muted-foreground"
-                  >
-                    <ChevronsUpDown size={16} />
-                    Show all</Collapsible.Trigger
-                  >
-
-                  <Collapsible.Content>
-                    <div class="flex flex-col gap-1 ml-4">
-                      {#each opt.meta.platforms as item}
-                        <p>{item}</p>
-                      {/each}
-                    </div>
-                 </Collapsible.Content>
-               </Collapsible.Root>
-              </div>
-            {:else}
-              <p class="ml-4 text-sm text-gray-500 italic">No platforms listed.</p>
-            {/if}
-          </div>
-        </div>
-      </div>
-    {:else}
-      <div class="grid grid-cols-1 md:grid-cols-6 gap-2">
-        <!-- Left Box -->
-        <div class="rounded border p-4 col-span-6 md:col-span-4">
-          <p class="font-bold text-muted-foreground mb-4">Informations</p>
-
-          <div class="flex flex-col gap-4">
-            <span class="bg-muted animate-pulse rounded-md w-24 h-5"></span>
-            <span class="bg-muted animate-pulse rounded-md w-48 h-4 ml-2 mb-4"
-            ></span>
-
-            <span class="bg-muted animate-pulse rounded-md w-32 h-5"></span>
-            <span class="bg-muted animate-pulse rounded-md w-72 h-4 ml-2 mb-4"
-            ></span>
-
-            <span class="bg-muted animate-pulse rounded-md w-24 h-5"></span>
-            <span class="bg-muted animate-pulse rounded-md w-48 h-4 ml-2"
-            ></span>
-          </div>
-        </div>
-
-        <!-- Right Box -->
-        <div class="rounded border p-4 col-span-6 md:col-span-2">
-          <p class="font-bold text-muted-foreground mb-4">Meta</p>
-
-          <div class="flex flex-col gap-4">
-            <div class="flex gap-2 flex-wrap mb-4">
-              <span class="bg-muted animate-pulse rounded-md w-24 h-5"></span>
-              <span class="bg-muted animate-pulse rounded-md w-48 h-5 ml-2"
-              ></span>
+              {/each}
             </div>
-            <span class="bg-muted animate-pulse rounded-md w-24 h-5"></span>
-            <span class="bg-muted animate-pulse rounded-md w-48 h-4 ml-2"
-            ></span>
-            <span class="bg-muted animate-pulse rounded-md w-32 h-5"></span>
-            <span class="bg-muted animate-pulse rounded-md w-10 h-4 ml-2"
-            ></span>
-            <span class="bg-muted animate-pulse rounded-md w-24 h-5"></span>
-            <span class="bg-muted animate-pulse rounded-md w-48 h-4 ml-2"
-            ></span>
           </div>
-        </div>
+        {:else}
+          <div>
+            <h4>Maintainers</h4>
+            <p class="pl-4 text-sm text-muted-foreground italic">
+              No maintainers listed.
+            </p>
+          </div>
+        {/if}
+
+        {#if pkg && pkg.platforms.length}
+          <div>
+            <h4>Platforms</h4>
+            <div class="flex flex-wrap gap-2 pl-4">
+              <p class="flex flex-col gap-1">
+                {#each pkg.platformsSimplify as item}
+                  <span class="flex gap-2 items-center">
+                    {#if item == 'linux'}
+                      <SiLinux size={16} />
+                      Linux
+                    {:else if item == 'darwin'}
+                      <SiApple size={16} />
+                      Darwin
+                    {:else if item == 'freebsd'}
+                      <SiFreebsd size={16} />
+                      FreeBSD
+                    {:else}
+                      <Package size={16} />
+                      {item}
+                    {/if}
+                  </span>
+                {/each}
+              </p>
+            </div>
+            <Collapsible.Root class="mt-4 pl-4">
+              <Collapsible.Trigger
+                class="flex gap-1 items-center text-muted-foreground"
+              >
+                <ChevronsUpDown size={16} />
+                Show all</Collapsible.Trigger
+              >
+
+              <Collapsible.Content>
+                <div class="flex flex-col gap-1 pl-4">
+                  {#each pkg.platforms as item}
+                    <p>{item}</p>
+                  {/each}
+                </div>
+              </Collapsible.Content>
+            </Collapsible.Root>
+          </div>
+        {:else}
+          <div>
+            <h4>Platforms</h4>
+            <p class="pl-4 text-sm text-muted-foreground italic">
+              No platforms listed.
+            </p>
+          </div>
+        {/if}
       </div>
-    {/if}
+    </div>
   </div>
 </main>

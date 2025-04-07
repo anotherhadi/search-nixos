@@ -1,54 +1,52 @@
 <script lang="ts">
-  import { replaceState } from "$app/navigation";
-  import Navigation from "$lib/components/navigation.svelte";
-  import { excludeSource, searchText } from "$lib/stores/search";
-  import axios from "axios";
-  import { onMount } from "svelte";
+  import { replaceState } from '$app/navigation'
+  import Navigation from '$lib/components/navigation.svelte'
+  import { searchText } from '$lib/stores/search'
+  import { API_URL } from '$lib/vars'
+  import axios from 'axios'
+  import { onMount } from 'svelte'
 
-  let nOptions: number = $state(0);
-  let nPackages: number = $state(0);
-  let lastUpdated: string = $state("");
-  let version: string = $state("");
+  let nOptions: number = $state(0)
+  let nPackages: number = $state(0)
+  let lastUpdated: string = $state('')
+  let version: string = $state('')
 
   onMount(async () => {
     axios
-      .get("https://search-nixos-api.hadi.diy/stats")
+      .get(`${API_URL}/stats`)
       .then((response) => {
         if (response.status === 200) {
           nOptions =
-            parseInt(response.data["nixos-length"]) +
-            parseInt(response.data["hm-length"]) +
-            parseInt(response.data["darwin-length"]);
+            parseInt(response.data['nixos-length']) +
+            parseInt(response.data['hm-length']) +
+            parseInt(response.data['darwin-length'])
           nPackages =
-            parseInt(response.data["nixpkgs-length"]) +
-            parseInt(response.data["nur-length"]);
-          lastUpdated = response.data["last-updated"];
-          version = response.data["version"];
+            parseInt(response.data['nixpkgs-length']) +
+            parseInt(response.data['nur-length'])
+          lastUpdated = response.data['last-updated']
+          version = response.data['version']
         } else {
-          console.error("Error fetching data:", response.statusText);
+          console.error('Error fetching data:', response.statusText)
         }
       })
       .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  });
+        console.error('Error fetching data:', error)
+      })
+  })
 </script>
 
 <Navigation
   onSend={() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    urlParams.set("q", $searchText);
-    if ($excludeSource.length > 0) {
-      urlParams.set("exclude", $excludeSource.join(","));
-    }
-    replaceState("/search?" + urlParams.toString(), "");
+    const urlParams = new URLSearchParams(window.location.search)
+    urlParams.set('q', $searchText)
+    replaceState('/search?' + urlParams.toString(), '')
   }}
 />
 <main class="gap-0">
   <h1 class="mb-0">Search NixOS - Informations</h1>
   <p class="text-sm mb-6 text-muted-foreground">
-    Version {version !== "" ? version : "Loading..."}
-    <br />Last updated {lastUpdated !== "" ? lastUpdated : "Loading..."}
+    Version {version !== '' ? version : 'Loading...'}
+    <br />Last updated {lastUpdated !== '' ? lastUpdated : 'Loading...'}
   </p>
   <p class="md:text-lg mb-2">
     A simple search engine for <strong>NixOS</strong>, <strong>Nixpkgs</strong>,

@@ -1,50 +1,84 @@
 <script lang="ts">
-  import Clipboard from "@lucide/svelte/icons/clipboard";
-  import axios from "axios";
-  import { toast } from "svelte-sonner";
-  import { onMount } from "svelte";
-  import Button from "$lib/components/ui/button/button.svelte";
-  import Skeleton from "$lib/components/ui/skeleton/skeleton.svelte";
-  import { searchText, excludeSource } from "$lib/stores/search";
-  import { replaceState } from "$app/navigation";
-  import Navigation from "$lib/components/navigation.svelte";
+  import Clipboard from '@lucide/svelte/icons/clipboard'
+  import axios from 'axios'
+  import { toast } from 'svelte-sonner'
+  import { onMount } from 'svelte'
+  import Button from '$lib/components/ui/button/button.svelte'
+  import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte'
+  import { searchText } from '$lib/stores/search'
+  import { replaceState } from '$app/navigation'
+  import Navigation from '$lib/components/navigation.svelte'
   import {
     ChevronLeft,
     ChevronRight,
     ChevronsLeft,
     ChevronsRight,
-  } from "@lucide/svelte";
+    ShieldAlert,
+    TriangleAlert,
+  } from '@lucide/svelte'
+  import { API_URL, DEBUG } from '$lib/vars'
+  import Badge from '$lib/components/ui/badge/badge.svelte'
 
-  let results: any[] = $state([]);
-  let page: number = $state(1);
-  let perPage: number = $state(20);
-  let total: number = $state(0);
-  let totalPages: number = $state(0);
-  let loading: boolean = $state(false);
+  let results: any[] = $state([])
+  let page: number = $state(1)
+  let perPage: number = $state(20)
+  let total: number = $state(0)
+  let totalPages: number = $state(0)
+  let loading: boolean = $state(false)
+  let confirmedSearchText: string = $state('')
+
+  function highlightSegments(
+    text: string,
+    query: string,
+  ): { text: string; highlight: boolean }[] {
+    if (!query) return [{ text, highlight: false }]
+
+    const words = query
+      .split(/\s+/)
+      .filter(Boolean)
+      .map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')) // escape regex chars
+
+    if (words.length === 0) return [{ text, highlight: false }]
+
+    const regex = new RegExp(`(${words.join('|')})`, 'gi')
+    const segments: { text: string; highlight: boolean }[] = []
+
+    let lastIndex = 0
+    for (const match of text.matchAll(regex)) {
+      const index = match.index ?? 0
+      if (index > lastIndex) {
+        segments.push({ text: text.slice(lastIndex, index), highlight: false })
+      }
+      segments.push({ text: match[0], highlight: true })
+      lastIndex = index + match[0].length
+    }
+
+    if (lastIndex < text.length) {
+      segments.push({ text: text.slice(lastIndex), highlight: false })
+    }
+
+    return segments
+  }
 
   async function OnSend({ resetPage = true }: { resetPage?: boolean } = {}) {
-    if ($searchText === "") {
-      return;
+    confirmedSearchText = $searchText
+    if ($searchText === '') {
+      return
     }
-    if ($searchText.length < 3) {
-      toast.error("Query must be at least 3 characters long");
-      return;
+    if ($searchText.length < 1) {
+      toast.error('Query must be at least 1 characters long')
+      return
     }
-    loading = true;
-    let url =
-      "https://search-nixos-api.hadi.diy/search?q=" +
-      encodeURIComponent($searchText);
-    if ($excludeSource.length > 0) {
-      url += "&exclude=" + $excludeSource.join(",");
-    }
+    loading = true
+    let url = `${API_URL}/search?q=` + encodeURIComponent($searchText)
     if (!isNaN(page) && page > 1) {
-      url += "&page=" + page;
+      url += '&page=' + page
     }
     if (!isNaN(perPage) && perPage !== 20) {
-      url += "&perPage=" + perPage;
+      url += '&perPage=' + perPage
     }
     if (resetPage) {
-      page = 1;
+      page = 1
     }
     await axios
       .get(url)
@@ -52,69 +86,64 @@
         if (response.status === 200) {
           results = Array.isArray(response.data.results)
             ? response.data.results
-            : [];
-          total = response.data.total;
-          page = response.data.page;
-          totalPages = response.data.totalPages;
-          perPage = response.data.perPage;
+            : []
+          total = response.data.total
+          page = response.data.page
+          totalPages = response.data.totalPages
+          perPage = response.data.perPage
+          if (DEBUG) {
+            console.log('Response data:', response.data)
+          }
         } else {
-          console.error("Error fetching data:", response.statusText);
-          toast.error("Error fetching data: " + response.statusText);
+          console.error('Error fetching data:', response.statusText)
+          toast.error('Error fetching data: ' + response.statusText)
         }
-        const urlParams = new URLSearchParams(window.location.search);
-        urlParams.set("q", $searchText);
-        if ($excludeSource.length > 0) {
-          urlParams.set("exclude", $excludeSource.join(","));
-        }
-        replaceState("/search?" + urlParams.toString(), "");
+        const urlParams = new URLSearchParams(window.location.search)
+        urlParams.set('q', $searchText)
+        replaceState('/search?' + urlParams.toString(), '')
       })
       .catch((error) => {
-        console.error("Error fetching data:", error);
-        toast.error("Error fetching data: " + error);
-      });
-    loading = false;
+        console.error('Error fetching data:', error)
+        toast.error('Error fetching data: ' + error)
+      })
+    loading = false
   }
 
   function CopyToClipboard(text: string) {
     navigator.clipboard.writeText(text).then(
       () => {
-        toast.success("Copied to clipboard");
+        toast.success('Copied to clipboard')
       },
       (err) => {
-        console.error("Could not copy text: ", err);
-        toast.error("Error copying text: " + err);
+        console.error('Could not copy text: ', err)
+        toast.error('Error copying text: ' + err)
       },
-    );
+    )
   }
 
   onMount(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    let query = urlParams.get("q") || "";
+    const urlParams = new URLSearchParams(window.location.search)
+    let query = urlParams.get('q') || ''
     if (query.length > 0) {
-      searchText.update(() => query);
+      searchText.update(() => query)
     }
 
-    let exclude = urlParams.get("exclude") || "";
-    if (exclude.length > 0) {
-      excludeSource.update(() => exclude.split(","));
-    }
-
-    let perPageParam = urlParams.get("perPage") || "";
+    let perPageParam = urlParams.get('perPage') || ''
     if (perPageParam.length > 0) {
       if (!isNaN(parseInt(perPageParam))) {
-        perPage = parseInt(perPageParam);
+        perPage = parseInt(perPageParam)
       }
     }
 
-    let pageParam = urlParams.get("page") || "";
+    let pageParam = urlParams.get('page') || ''
     if (pageParam.length > 0) {
       if (!isNaN(parseInt(pageParam))) {
-        page = parseInt(pageParam);
+        page = parseInt(pageParam)
       }
     }
 
-    OnSend();
-  });
+    OnSend()
+  })
 </script>
 
 <Navigation onSend={OnSend} />
@@ -142,7 +171,7 @@
         <p class="text-muted-foreground ml-4">
           {results.length} of
           {total}
-          {total <= 1 ? "result" : "results"}
+          {total <= 1 ? 'result' : 'results'}
         </p>
         <div class="justify-center items-center gap-2 mr-4 md:flex hidden">
           <Button
@@ -151,10 +180,10 @@
             class="h-7 w-7"
             disabled={page === 1}
             onclick={() => {
-              page = 1;
+              page = 1
               OnSend({
                 resetPage: false,
-              });
+              })
             }}
           >
             <ChevronsLeft />
@@ -165,10 +194,10 @@
             class="h-7 w-7"
             disabled={page === 1}
             onclick={() => {
-              page -= 1;
+              page -= 1
               OnSend({
                 resetPage: false,
-              });
+              })
             }}
           >
             <ChevronLeft />
@@ -184,10 +213,10 @@
             class="h-7 w-7"
             disabled={page === totalPages}
             onclick={() => {
-              page += 1;
+              page += 1
               OnSend({
                 resetPage: false,
-              });
+              })
             }}
           >
             <ChevronRight />
@@ -199,10 +228,10 @@
             class="h-7 w-7"
             disabled={page === totalPages}
             onclick={() => {
-              page = totalPages;
+              page = totalPages
               OnSend({
                 resetPage: false,
-              });
+              })
             }}
           >
             <ChevronsRight />
@@ -219,27 +248,72 @@
           >
             <div class="px-4 py-4 border-b">
               <div class="flex justify-start items-center gap-2">
-                <p
-                  class="text-xl text-primary font-semibold p-0 m-0 break-all [overflow-wrap:anywhere]"
-                >
-                  <a href="/{result.name}">
-                    {result.name}
-                  </a>
-                </p>
+                <div class="flex w-full justify-between flex-wrap">
+                  <div class="flex gap-2 items-center">
+                    <p
+                      class="text-xl flex gap-1 items-center text-primary font-semibold p-0 m-0 break-all [overflow-wrap:anywhere]"
+                    >
+                      {#if result.Broken}
+                        <TriangleAlert class="size-5 text-destructive" />
+                      {/if}
+                      {#if result.Insecure}
+                        <ShieldAlert class="size-5 text-orange-500" />
+                      {/if}
+                      <a href="/{result.Source}/{result.Type}/{result.Key}">
+                        {@html highlightSegments(
+                          result.Key,
+                          confirmedSearchText,
+                        )
+                          .map((seg) =>
+                            seg.highlight
+                              ? `<span class="underline">${seg.text}</span>`
+                              : seg.text,
+                          )
+                          .join('')}
+                      </a>
+                    </p>
 
-                {#if result.hovered}
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    class="text-sm text-muted-foreground h-7 w-7"
-                    onclick={() => CopyToClipboard(result.key)}
-                  >
-                    <Clipboard />
-                  </Button>
-                {/if}
+                    {#if result.hovered}
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        class="text-sm text-muted-foreground h-7 w-7"
+                        onclick={() => CopyToClipboard(result.Key)}
+                      >
+                        <Clipboard />
+                      </Button>
+                    {/if}
+                  </div>
+                  <div>
+                    <Badge
+                      variant="outline"
+                      class={result.Source === 'home-manager'
+                        ? 'text-green-500'
+                        : result.Source === 'nixpkgs'
+                          ? 'text-cyan-500'
+                          : result.Source === 'nixos'
+                            ? 'text-red-500'
+                            : result.Source === 'nur'
+                              ? 'text-orange-500'
+                              : result.Source === 'darwin'
+                                ? 'text-yellow-500'
+                                : ''}
+                    >
+                      {result.Source}
+                    </Badge>
+                    <Badge
+                      variant="outline"
+                      class={result.Type === 'option'
+                        ? 'text-blue-500'
+                        : 'text-orange-500'}
+                    >
+                      {result.Type}
+                    </Badge>
+                  </div>
+                </div>
               </div>
               <p class="whitespace-nowrap overflow-ellipsis overflow-hidden">
-                {result.description}
+                {result.Description}
               </p>
             </div>
           </div>
@@ -252,7 +326,7 @@
         <p class="text-muted-foreground ml-4">
           {results.length} of
           {total}
-          {total <= 1 ? "result" : "results"}
+          {total <= 1 ? 'result' : 'results'}
         </p>
         <div class="justify-center items-center gap-2 mr-4 flex">
           <Button
@@ -261,10 +335,10 @@
             class="h-7 w-7"
             disabled={page === 1}
             onclick={() => {
-              page = 1;
+              page = 1
               OnSend({
                 resetPage: false,
-              });
+              })
             }}
           >
             <ChevronsLeft />
@@ -275,10 +349,10 @@
             class="h-7 w-7"
             disabled={page === 1}
             onclick={() => {
-              page -= 1;
+              page -= 1
               OnSend({
                 resetPage: false,
-              });
+              })
             }}
           >
             <ChevronLeft />
@@ -294,10 +368,10 @@
             class="h-7 w-7"
             disabled={page === totalPages}
             onclick={() => {
-              page += 1;
+              page += 1
               OnSend({
                 resetPage: false,
-              });
+              })
             }}
           >
             <ChevronRight />
@@ -309,10 +383,10 @@
             class="h-7 w-7"
             disabled={page === totalPages}
             onclick={() => {
-              page = totalPages;
+              page = totalPages
               OnSend({
                 resetPage: false,
-              });
+              })
             }}
           >
             <ChevronsRight />

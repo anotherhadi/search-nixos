@@ -1,37 +1,37 @@
 <script lang="ts">
-  import { CirclePlus, Check } from "@lucide/svelte";
-  import { cn } from "$lib/utils.js";
-  import * as Popover from "$lib/components/ui/popover";
-  import * as Command from "$lib/components/ui/command";
-  import Button from "$lib/components/ui/button/button.svelte";
-  import Badge from "$lib/components/ui/badge/badge.svelte";
-  import Separator from "$lib/components/ui/separator/separator.svelte";
+  import { CirclePlus, Check } from '@lucide/svelte'
+  import { cn } from '$lib/utils.js'
+  import * as Popover from '$lib/components/ui/popover'
+  import * as Command from '$lib/components/ui/command'
+  import Button from '$lib/components/ui/button/button.svelte'
+  import Badge from '$lib/components/ui/badge/badge.svelte'
+  import Separator from '$lib/components/ui/separator/separator.svelte'
 
   type Props = {
-    title: string;
-    selectedValues: string[];
+    title: string
+    selectedValues: string[]
     options: {
-      label: string;
-      value: string;
+      label: string
+      value: string
       // This should be `Component` after lucide-svelte updates types
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      icon?: any;
-    }[];
-    onSend: () => void;
-  };
+      icon?: any
+    }[]
+    onSend: () => void
+  }
 
   let {
     title,
     options,
     selectedValues = $bindable<string[]>([]),
     onSend,
-  }: Props = $props();
+  }: Props = $props()
 </script>
 
 <Popover.Root
   onOpenChange={(o) => {
     if (!o) {
-      onSend();
+      onSend()
     }
   }}
 >
@@ -75,18 +75,18 @@
                 if (isSelected) {
                   selectedValues = selectedValues.filter(
                     (value) => value !== option.value,
-                  );
+                  )
                 } else {
-                  selectedValues = [...selectedValues, option.value];
+                  selectedValues = [...selectedValues, option.value]
                 }
               }}
             >
               <div
                 class={cn(
-                  "border-primary mr-2 flex size-4 items-center justify-center rounded-sm border",
+                  'border-primary mr-2 flex size-4 items-center justify-center rounded-sm border',
                   isSelected
-                    ? "bg-primary text-primary-foreground"
-                    : "opacity-50 [&_svg]:invisible",
+                    ? 'bg-primary text-primary-foreground'
+                    : 'opacity-50 [&_svg]:invisible',
                 )}
               >
                 <Check class="size-4" />
@@ -106,7 +106,7 @@
             <Command.Item
               class="justify-center text-center"
               onSelect={() => {
-                selectedValues = [];
+                selectedValues = []
               }}
             >
               Clear filters

@@ -1,5 +1,5 @@
-import { AspectRatio as AspectRatioPrimitive } from "bits-ui";
+import { AspectRatio as AspectRatioPrimitive } from 'bits-ui'
 
-const Root = AspectRatioPrimitive.Root;
+const Root = AspectRatioPrimitive.Root
 
-export { Root, Root as AspectRatio };
+export { Root, Root as AspectRatio }
