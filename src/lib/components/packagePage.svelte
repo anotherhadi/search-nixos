@@ -113,7 +113,7 @@
               {pkg.longDescription || pkg.description}
             </p>
           </div>
-        {:else}
+        {:else if !pkg}
           <div>
             <h4>Description</h4>
             <p class="pl-4">
