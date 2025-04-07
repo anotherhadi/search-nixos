@@ -2,7 +2,7 @@
   import { replaceState } from '$app/navigation'
   import Navigation from '$lib/components/navigation.svelte'
   import { searchText } from '$lib/stores/search'
-  import { API_URL } from '$lib/vars'
+  import { API_URL, DEBUG } from '$lib/vars'
   import axios from 'axios'
   import { onMount } from 'svelte'
 
@@ -16,9 +16,12 @@
       .get(`${API_URL}/stats`)
       .then((response) => {
         if (response.status === 200) {
+          if (DEBUG) {
+            console.log('Response data:', response.data)
+          }
           nOptions =
             parseInt(response.data['nixos-length']) +
-            parseInt(response.data['hm-length']) +
+            parseInt(response.data['homemanager-length']) +
             parseInt(response.data['darwin-length'])
           nPackages =
             parseInt(response.data['nixpkgs-length']) +
@@ -82,6 +85,9 @@
     />
     <code>kitty themes</code> - Search for everything containing kitty and
     themes<br />
+    <code>!nixpkgs tailscale</code> - Search for everything starting with
+    tailscale but exclude nixpkgs source<br /><br />
+    Sources available: nixos, nixpkgs, nur, darwin, home-manager<br />
   </p>
 
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
