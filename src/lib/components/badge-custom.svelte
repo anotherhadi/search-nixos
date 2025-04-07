@@ -13,7 +13,7 @@
       color = '#eab308' // yellow-500
     } else if (name === 'darwin') {
       color = '#ec4899' // pink-500
-    } else if (name === 'homemanager') {
+    } else if (name === 'home-manager') {
       color = '#3b82f6' // blue-500
     } else if (name === 'nur') {
       color = '#22c55e' // green-500
