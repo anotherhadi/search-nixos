@@ -20,7 +20,7 @@
   {/if}
 </svelte:head>
 
-<div class="relative w-full rounded bg-muted items-center flex">
+<div class="relative w-full rounded bg-muted items-center flex overflow-auto">
   {#if showCopy}
     <Button
       variant="ghost"

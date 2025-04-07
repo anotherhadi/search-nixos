@@ -143,21 +143,21 @@
       {/if}
 
       {#if pkg && pkg.type}
-        <div class="flex gap-2 items-stretch">
+        <div class="flex gap-2 items-stretch flex-col md:flex-row">
           <h4 class="w-24">Type</h4>
           <Codeblock text={pkg.type} showCopy={false} />
         </div>
       {/if}
 
       {#if pkg && pkg.default}
-        <div class="flex gap-2 items-stretch">
+        <div class="flex gap-2 items-stretch flex-col md:flex-row">
           <h4 class="w-24">Default</h4>
           <Codeblock text={pkg.default} />
         </div>
       {/if}
 
       {#if pkg && pkg.example}
-        <div class="flex gap-2 items-stretch">
+        <div class="flex gap-2 items-stretch flex-col md:flex-row">
           <h4 class="w-24">Example</h4>
           <Codeblock text={pkg.example} />
         </div>
