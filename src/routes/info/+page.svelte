@@ -85,6 +85,7 @@
     />
     <code>kitty themes</code> - Search for everything containing kitty and
     themes<br />
+    <code>maintainer=tex</code> - Search package maintain by @tex<br />
     <code>!nixpkgs tailscale</code> - Search for everything starting with
     tailscale but exclude nixpkgs source<br /><br />
     Sources available: nixos, nixpkgs, nur, darwin, home-manager<br />
