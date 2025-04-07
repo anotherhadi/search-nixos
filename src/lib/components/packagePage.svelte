@@ -189,7 +189,7 @@
         {#if pkg && pkg.knownVulnerabilities.length}
           <div>
             <h4>Known Vulnerabilities</h4>
-            <div>
+            <div class="flex flex-col gap-2">
               {#each pkg.knownVulnerabilities as item}
                 <Alert.Root variant="destructive">
                   <CircleAlert class="size-4" />
