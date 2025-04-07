@@ -1,6 +1,8 @@
 <script lang="ts">
   import { replaceState } from '$app/navigation'
   import Navigation from '$lib/components/navigation.svelte'
+  import SkeletonText from '$lib/components/skeleton-text.svelte'
+  import * as Table from '$lib/components/ui/table/index.js'
   import { searchText } from '$lib/stores/search'
   import { API_URL, DEBUG } from '$lib/vars'
   import axios from 'axios'
@@ -46,74 +48,107 @@
   }}
 />
 <main class="gap-0">
-  <h1 class="mb-0">Search NixOS - Informations</h1>
-  <p class="text-sm mb-6 text-muted-foreground">
-    Version {version !== '' ? version : 'Loading...'}
-    <br />Last updated {lastUpdated !== '' ? lastUpdated : 'Loading...'}
-  </p>
-  <p class="md:text-lg mb-2">
-    A simple search engine for <strong>NixOS</strong>, <strong>Nixpkgs</strong>,
-    <strong>Home Manager</strong>, <strong>NUR</strong> (Nix User Repository)
-    and <strong>Nix-Darwin</strong>. Find options, packages, modules, and more
-    effortlessly.
-  </p>
+  <h1 class="font-bold text-muted-foreground">Informations</h1>
 
-  <p class="">
-    Search through
-    {#if nOptions > 0}
-      <strong>{nOptions}</strong>
-    {:else}
-      <span class="text-muted-foreground animate-pulse">???????</span>
-    {/if}
-    options and
-    {#if nPackages > 0}
-      <strong>{nPackages}</strong>
-    {:else}
-      <span class="text-muted-foreground animate-pulse">??????</span>
-    {/if}
-    packages.
-  </p>
-
-  <h2>Example Queries</h2>
-  <p>
-    <code>kitty</code> - Search for kitty<br />
-    <code>package kitty</code> - Search for the package kitty<br />
-    <code>option services.xserver</code> - Search for the xserver option<br />
-    <code>^tailscale</code> - Search for everything starting with tailscale<br
-    />
-    <code>option enable$</code> - Search for every option ending with enable<br
-    />
-    <code>kitty themes</code> - Search for everything containing kitty and
-    themes<br />
-    <code>maintainer=tex</code> - Search package maintain by @tex<br />
-    <code>!nixpkgs tailscale</code> - Search for everything starting with
-    tailscale but exclude nixpkgs source<br /><br />
-    Sources available: nixos, nixpkgs, nur, darwin, home-manager<br />
-  </p>
-
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
+  <div class="flex flex-col gap-5">
     <div>
-      <h2>Contributing</h2>
-      <p>
-        This project is open source! If you find a bug or have a suggestion,
-        feel free to
-        <a
-          href="https://github.com/anotherhadi/search-nixos"
-          class="text-blue-600 hover:underline">open an issue</a
-        > or a pull request on GitHub.
-      </p>
+      <h4>Version</h4>
+      {#if version}
+        <p class="pl-4">{version}</p>
+      {:else}
+        <SkeletonText
+          >nixos/unstable/nixos-25.05pre779115.42a1c966be22</SkeletonText
+        >
+      {/if}
     </div>
 
     <div>
-      <h2>Funding</h2>
-      <p>
-        Support this project by donating on
-        <a
-          href="https://ko-fi.com/anotherhadi"
-          target="_blank"
-          class="text-blue-600 hover:underline">Ko-fi</a
-        >. Your contribution helps cover server costs and encourages further
-        development. Thank you!
+      <h4>Last updated</h4>
+      {#if lastUpdated}
+        <p class="pl-4">{lastUpdated}</p>
+      {:else}
+        <SkeletonText>2025-04-07T20:32:26+02:00</SkeletonText>
+      {/if}
+    </div>
+
+    <div>
+      <h4>Query help</h4>
+      <Table.Root>
+        <Table.Header>
+          <Table.Row>
+            <Table.Head class="w-[200px]">Query/Field</Table.Head>
+            <Table.Head class="w-[200px]">Example</Table.Head>
+            <Table.Head>Description</Table.Head>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          <Table.Row>
+            <Table.Cell class="font-medium">Multi-field search</Table.Cell>
+            <Table.Cell>kitty theme</Table.Cell>
+            <Table.Cell
+              >Matches entries that contain <strong>all</strong> words.</Table.Cell
+            >
+          </Table.Row>
+          <Table.Row>
+            <Table.Cell class="font-medium">Package prefix</Table.Cell>
+            <Table.Cell>package kitty</Table.Cell>
+            <Table.Cell
+              >Only search for packages. <i>(nixpkgs, nur)</i></Table.Cell
+            >
+          </Table.Row>
+          <Table.Row>
+            <Table.Cell class="font-medium">Option prefix</Table.Cell>
+            <Table.Cell>option tailscale</Table.Cell>
+            <Table.Cell
+              >Only search for options. <i>(nixos, home-manager, darwin)</i
+              ></Table.Cell
+            >
+          </Table.Row>
+          <Table.Row>
+            <Table.Cell class="font-medium">Starts with</Table.Cell>
+            <Table.Cell>^kitty</Table.Cell>
+            <Table.Cell>Matches entries that start with the field.</Table.Cell>
+          </Table.Row>
+          <Table.Row>
+            <Table.Cell class="font-medium">Ends with</Table.Cell>
+            <Table.Cell>theme$</Table.Cell>
+            <Table.Cell>Matches entries that end with the field.</Table.Cell>
+          </Table.Row>
+          <Table.Row>
+            <Table.Cell class="font-medium">Source include</Table.Cell>
+            <Table.Cell>home-manager kitty</Table.Cell>
+            <Table.Cell
+              >Restrict search to a specific source. <sup
+                class="text-muted-foreground">[1]</sup
+              ></Table.Cell
+            >
+          </Table.Row>
+          <Table.Row>
+            <Table.Cell class="font-medium">Source exclude</Table.Cell>
+            <Table.Cell>!home-manager kitty</Table.Cell>
+            <Table.Cell
+              >Exclude results from that source.<sup
+                class="text-muted-foreground">[1]</sup
+              ></Table.Cell
+            >
+          </Table.Row>
+          <Table.Row>
+            <Table.Cell class="font-medium">Broken packages</Table.Cell>
+            <Table.Cell>?broken</Table.Cell>
+            <Table.Cell>Only show packages marked as broken.</Table.Cell>
+          </Table.Row>
+          <Table.Row>
+            <Table.Cell class="font-medium">Maintainer filter</Table.Cell>
+            <Table.Cell>?maintainer=tux</Table.Cell>
+            <Table.Cell
+              >Only show packages maintained by the given user.</Table.Cell
+            >
+          </Table.Row>
+        </Table.Body>
+      </Table.Root>
+      <p class="text-muted-foreground text-sm">
+        <sup>[1]</sup> Available sources are: nixpkgs, nur, nixos, home-manager,
+        darwin
       </p>
     </div>
   </div>
