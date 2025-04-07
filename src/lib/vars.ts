@@ -1,2 +1,2 @@
-export const DEBUG = true
-export const API_URL = 'http://localhost:8090'
+export const DEBUG = false
+export const API_URL = 'https://search-nixos-api.hadi.diy'
