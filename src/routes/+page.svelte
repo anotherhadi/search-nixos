@@ -65,7 +65,8 @@
     </svg>
   </div>
   <p class="flex gap-4 items-center text-sm md:text-base">
-    <a href="/info"> More Info </a>
+    <a href="/info"> Informations </a>
+    <a href="/settings"> Settings </a>
   </p>
 </nav>
 
