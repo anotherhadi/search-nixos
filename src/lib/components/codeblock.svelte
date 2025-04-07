@@ -42,5 +42,9 @@
       {/if}
     </Button>
   {/if}
-  <Highlight language={isShell ? shell : nix} code={text} />
+  <Highlight
+    language={isShell ? shell : nix}
+    code={text}
+    class="overflow-x-scroll"
+  />
 </div>
