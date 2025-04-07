@@ -35,6 +35,7 @@
 
     const words = query
       .split(/\s+/)
+      .filter((word) => word !== 'package' && word !== 'option')
       .filter(Boolean)
       .map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')) // escape regex chars
 
