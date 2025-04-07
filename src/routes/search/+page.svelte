@@ -250,7 +250,9 @@
           >
             <div class="px-4 py-4 border-b">
               <div class="flex justify-start items-center gap-2">
-                <div class="flex w-full justify-between flex-wrap">
+                <div
+                  class="flex w-full justify-between flex-wrap flex-col md:flex-row gap-1"
+                >
                   <div class="flex gap-2 items-center">
                     <p
                       class="text-xl flex gap-1 items-center text-primary font-semibold p-0 m-0 break-all [overflow-wrap:anywhere]"

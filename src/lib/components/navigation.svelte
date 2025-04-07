@@ -22,7 +22,7 @@
 
 <nav
   class="sticky top-0
-    px-8 py-2 bg-background/70 border-b backdrop-blur-lg z-10 h-24"
+    px-8 py-4 bg-background/70 border-b backdrop-blur-lg z-10"
 >
   <div
     class="w-full mx-auto max-w-7xl flex items-center flex-col justify-around h-full"
