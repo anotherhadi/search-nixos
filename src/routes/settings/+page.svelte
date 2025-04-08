@@ -4,7 +4,7 @@
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js'
   import Sun from '@lucide/svelte/icons/sun'
   import Moon from '@lucide/svelte/icons/moon'
-  import { searchText, expertMode, searchHistory } from '$lib/stores/search'
+  import { searchText, expertMode, searchHistory, isSearchHistoryActive } from '$lib/stores/search'
   import Switch from '$lib/components/ui/switch/switch.svelte'
   import Navigation from '$lib/components/navigation.svelte'
   import { replaceState } from '$app/navigation'
@@ -46,14 +46,26 @@
       </DropdownMenu.Root>
     </div>
 
-    <div class="flex flex-col gap-2">
-      <p class="text-sm font-medium leading-none">Reset history</p>
-      <Button
-        class="w-min"
-        onclick={() => {
-          searchHistory.set([])
-        }}>Reset</Button
-      >
+    <div
+      class="rounded border px-4 py-2 my-4 flex flex-wrap justify-between gap-5 items-center"
+    >
+      <div class="flex flex-col gap-1">
+        <p class="text-sm font-medium leading-none">History</p>
+        <p class="text-muted-foreground text-sm">
+          History of your searches are stored in the local storage of your
+          browser. You can clear the history by clicking the button below or
+          disable it by unchecking the switch.
+        </p>
+
+        <Button
+          class="w-min"
+          variant="link"
+          onclick={() => {
+            searchHistory.set([])
+          }}>Reset history</Button
+        >
+      </div>
+      <Switch id="disable-history" bind:checked={$isSearchHistoryActive} />
     </div>
 
     <div
