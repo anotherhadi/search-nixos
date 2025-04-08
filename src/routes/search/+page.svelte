@@ -5,7 +5,7 @@
   import { onMount } from 'svelte'
   import Button from '$lib/components/ui/button/button.svelte'
   import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte'
-  import { searchText } from '$lib/stores/search'
+  import { searchHistory, searchText } from '$lib/stores/search'
   import { replaceState } from '$app/navigation'
   import Navigation from '$lib/components/navigation.svelte'
   import {
@@ -72,6 +72,10 @@
       return
     }
     loading = true
+    searchHistory.update((searchHistory) => {
+      const updated = [$searchText, ...searchHistory]
+      return updated.slice(0, 100)
+    })
     let url = `${API_URL}/search?q=` + encodeURIComponent($searchText)
     if (!isNaN(page) && page > 1) {
       url += '&page=' + page

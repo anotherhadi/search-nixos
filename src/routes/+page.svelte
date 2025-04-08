@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { searchText } from '$lib/stores/search'
+  import { searchHistory, searchText } from '$lib/stores/search'
   import { replaceState } from '$app/navigation'
-  import { Search } from '@lucide/svelte'
+  import { History, Search, TestTube } from '@lucide/svelte'
   import Input from '$lib/components/ui/input/input.svelte'
   import Button from '$lib/components/ui/button/button.svelte'
 
@@ -86,7 +86,7 @@
     }}
     class="w-full relative flex justify-center flex-col gap-5"
   >
-    <div>
+    <div class="flex gap-5">
       <div class="flex justify-center items-center absolute h-10 w-10">
         <Search size={16} class="text-muted-foreground" />
       </div>
@@ -97,9 +97,66 @@
         placeholder="Search ..."
         autofocus
       />
+      <div class="m-auto">
+        <Button type="submit">Search</Button>
+      </div>
     </div>
-    <div class="m-auto">
-      <Button type="submit">Search</Button>
+    <div class="w-full border rounded overflow-y-auto max-h-52">
+      {#if $searchHistory.length == 0}
+        <Button
+          class="w-full justify-start items-center"
+          variant="ghost"
+          onclick={() => {
+            searchText.set('kitty themes')
+          }}
+        >
+          <TestTube class="text-muted-foreground" />
+          kitty themes
+        </Button>
+        <Button
+          class="w-full justify-start items-center"
+          variant="ghost"
+          onclick={() => {
+            searchText.set('^programs.kitty')
+          }}
+        >
+          <TestTube class="text-muted-foreground" />
+          ^programs.kitty
+        </Button>
+        <Button
+          class="w-full justify-start items-center"
+          variant="ghost"
+          onclick={() => {
+            searchText.set('option tailscale')
+          }}
+        >
+          <TestTube class="text-muted-foreground" />
+          option tailscale
+        </Button>
+        <Button
+          class="w-full justify-start items-center"
+          variant="ghost"
+          onclick={() => {
+            searchText.set('package ?broken ?maintainer=sigmanificient')
+          }}
+        >
+          <TestTube class="text-muted-foreground" />
+          package ?broken ?maintainer=sigmanificient
+        </Button>
+      {:else}
+        {#each $searchHistory as item}
+          <Button
+            class="w-full justify-start items-center"
+            variant="ghost"
+            onclick={() => {
+              searchText.set(item)
+            }}
+          >
+            <History class="text-muted-foreground" />
+            {item}
+          </Button>
+        {/each}
+      {/if}
     </div>
   </form>
 </main>
