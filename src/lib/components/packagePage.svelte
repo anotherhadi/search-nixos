@@ -126,7 +126,7 @@
           <div>
             <h4>Description</h4>
             <p class="pl-4">
-            {@html formatDescription(pkg.longDescription || pkg.description)}
+              {@html formatDescription(pkg.longDescription || pkg.description)}
             </p>
           </div>
         {:else if !pkg}
@@ -149,7 +149,8 @@
                   href={item}
                   target="_blank"
                   class="flex gap-2 items-center"
-                  rel="noopener noreferrer"><Globe size={16} /> {item.replace("https://", "")}</a
+                  rel="noopener noreferrer"
+                  ><Globe size={16} /> {item.replace('https://', '')}</a
                 >
               {/each}
             </p>
@@ -174,7 +175,9 @@
                 rel="noopener noreferrer"
               >
                 <SquareCode size={16} />
-                {pkg.position.replace('https://', '').replace('github.com/', '')}
+                {pkg.position
+                  .replace('https://', '')
+                  .replace('github.com/', '')}
               </a>
             </p>
           </div>
