@@ -110,6 +110,6 @@
     @apply !bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold;
   }
   main {
-    @apply mx-auto container px-8 py-4 flex flex-col gap-4 relative;
+    @apply mx-auto container px-4 py-4 flex flex-col gap-4 relative;
   }
 }
