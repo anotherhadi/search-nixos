@@ -135,7 +135,7 @@
           <Table.Row>
             <Table.Cell class="font-medium">Broken packages</Table.Cell>
             <Table.Cell>?broken</Table.Cell>
-            <Table.Cell>Only show packages marked as broken.</Table.Cell>
+            <Table.Cell>Only show packages marked as broken. See <sup>[2]</sup></Table.Cell>
           </Table.Row>
           <Table.Row>
             <Table.Cell class="font-medium">Maintainer filter</Table.Cell>
@@ -148,7 +148,8 @@
       </Table.Root>
       <p class="text-muted-foreground text-sm">
         <sup>[1]</sup> Available sources are: nixpkgs, nur, nixos, home-manager,
-        darwin
+        darwin<br/>
+        <sup>[2]</sup> Available special queries are: ?broken, ?vulnerable, ?maintainer=username
       </p>
     </div>
   </div>
