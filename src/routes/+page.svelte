@@ -150,9 +150,7 @@
           <Button
             class="w-full justify-start items-center"
             variant="ghost"
-            onclick={() => {
-              searchText.set(item)
-            }}
+            href={`/search?q=${item}`}
           >
             <History class="text-muted-foreground" />
             {item}
