@@ -38,6 +38,22 @@
       toast.error(`Error fetching data: ${error}`)
     }
   })
+
+  function formatDescription(description: string): string {
+    // Transform content between backticks into <code> tags.
+    let formatted = description.replace(
+      /`([^`]+)`/g,
+      (_match, content) => `<code>${content}</code>`,
+    )
+    formatted = formatted.replace('{file}', '')
+    // Replace only URL patterns inside angle brackets (<...>) into anchor tags.
+    formatted = formatted.replace(
+      /<((https?:\/\/)[^>]+)>/g,
+      (_match, url) =>
+        `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-blue-600 underline">${url.replace('https://', '')}</a>`,
+    )
+    return formatted
+  }
 </script>
 
 <Navigation
@@ -102,7 +118,7 @@
         <div>
           <h4>Description</h4>
           <p class="pl-4">
-            {pkg.longDescription || pkg.description}
+            {@html formatDescription(pkg.longDescription || pkg.description)}
           </p>
         </div>
       {:else}
@@ -125,7 +141,9 @@
                 href={item}
                 target="_blank"
                 class="flex gap-2 items-center"
-                rel="noopener noreferrer"><Github size={16} /> {item}</a
+                rel="noopener noreferrer"
+                ><Github size={16} />
+                {item.replace('https://', '').replace('github.com/', '')}</a
               >
             {/each}
           </p>
