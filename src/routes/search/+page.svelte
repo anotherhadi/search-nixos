@@ -9,6 +9,7 @@
   import { replaceState } from '$app/navigation'
   import Navigation from '$lib/components/navigation.svelte'
   import {
+    Bug,
     ChevronLeft,
     ChevronRight,
     ChevronsLeft,
@@ -17,7 +18,6 @@
     TriangleAlert,
   } from '@lucide/svelte'
   import { API_URL, DEBUG } from '$lib/vars'
-  import Badge from '$lib/components/ui/badge/badge.svelte'
   import BadgeCustom from '$lib/components/badge-custom.svelte'
 
   let results: any[] = $state([])
@@ -261,7 +261,10 @@
                         <TriangleAlert class="size-5 text-destructive" />
                       {/if}
                       {#if result.Insecure}
-                        <ShieldAlert class="size-5 text-orange-500" />
+                        <ShieldAlert class="size-5 text-yellow-500" />
+                      {/if}
+                      {#if result.Vulnerable}
+                        <Bug class="size-5 text-orange-500" />
                       {/if}
                       <a href="/{result.Source}/{result.Type}/{result.Key}">
                         {@html highlightSegments(
