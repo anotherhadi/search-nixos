@@ -101,7 +101,9 @@
         <Button type="submit">Search</Button>
       </div>
     </div>
-    <div class="w-full border rounded overflow-y-auto max-h-52">
+    <div
+      class="w-full border rounded-md overflow-auto max-h-52 grid items-stretch"
+    >
       {#if $searchHistory.length == 0}
         <Button
           class="w-full justify-start items-center"
