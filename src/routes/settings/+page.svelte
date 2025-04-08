@@ -9,6 +9,7 @@
   import Navigation from '$lib/components/navigation.svelte'
   import { replaceState } from '$app/navigation'
   import Button from '$lib/components/ui/button/button.svelte'
+    import { toast } from 'svelte-sonner'
 </script>
 
 <Navigation
@@ -62,6 +63,7 @@
           variant="link"
           onclick={() => {
             searchHistory.set([])
+            toast.success('History cleared')
           }}>Reset history</Button
         >
       </div>
