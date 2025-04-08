@@ -1,5 +1,8 @@
 <script>
   import { page } from '$app/state'
+
+  // All images are from @SAWARATSUKI
+
 </script>
 
 {#if page.error}
@@ -10,7 +13,7 @@
       <div class="w-1/2 md:w-1/3">
         <img
           alt="404"
-          src="https://github.com/SAWARATSUKI/KawaiiLogos/blob/main/ResponseCode/404%20NotFound.png?raw=true"
+          src="/errors/404.png"
         />
       </div>
       <div>
@@ -21,7 +24,7 @@
       <div class="w-1/2 md:w-1/3">
         <img
           alt="403"
-          src="https://github.com/SAWARATSUKI/KawaiiLogos/blob/main/ResponseCode/403%20Forbidden.png?raw=true"
+          src="/errors/403.png"
         />
       </div>
       <div>
@@ -32,7 +35,7 @@
       <div class="w-1/2 md:w-1/3">
         <img
           alt="418"
-          src="https://github.com/SAWARATSUKI/KawaiiLogos/blob/main/ResponseCode/418%20I'm%20a%20teapot.png?raw=true"
+          src="/errors/418.png"
         />
       </div>
       <div>
@@ -43,7 +46,7 @@
       <div class="w-1/2 md:w-1/3">
         <img
           alt="500"
-          src="https://github.com/SAWARATSUKI/KawaiiLogos/blob/main/ResponseCode/500%20InternalServerError.png?raw=true"
+          src="/errors/500.png"
         />
       </div>
       <div>
@@ -54,7 +57,7 @@
       <div class="w-1/2 md:w-1/3">
         <img
           alt="503"
-          src="https://github.com/SAWARATSUKI/KawaiiLogos/blob/main/ResponseCode/503%20ServiceUnavailable.png?raw=true"
+          src="/errors/503.png"
         />
       </div>
       <div>
