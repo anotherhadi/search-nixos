@@ -177,9 +177,9 @@
       </div>
     {:else}
       <div
-        class="w-full my-2 flex justify-between items-center flex-wrap gap-2"
+        class="w-full my-2 px-2 grid grid-cols-1 sm:grid-cols-2 justify-between sm:justify-center items-center gap-2"
       >
-        <p class="text-muted-foreground ml-4">
+        <p class="text-muted-foreground text-center sm:text-left">
           {#if !loading}
             {results.length} of
             {total}
@@ -189,7 +189,7 @@
           {/if}
         </p>
         {#if totalPages > 1}
-          <div class="justify-center items-center gap-2 mr-4 md:flex hidden">
+          <div class="justify-center sm:justify-end items-center gap-2 sm:flex hidden">
             <Button
               variant="ghost"
               size="icon"
@@ -355,9 +355,9 @@
       </div>
 
       <div
-        class="w-full my-2 flex justify-between items-center flex-wrap gap-2"
+        class="w-full my-2 px-2 grid grid-cols-1 sm:grid-cols-2 justify-between sm:justify-center items-center gap-2"
       >
-        <p class="text-muted-foreground ml-4">
+        <p class="text-muted-foreground text-center sm:text-left">
           {#if !loading}
             {results.length} of
             {total}
@@ -367,7 +367,7 @@
           {/if}
         </p>
         {#if totalPages > 1}
-          <div class="justify-center items-center gap-2 mr-4 flex">
+          <div class="justify-center sm:justify-end items-center gap-2 flex">
             <Button
               variant="ghost"
               size="icon"
