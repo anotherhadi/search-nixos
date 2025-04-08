@@ -4,6 +4,10 @@
   import { History, Search, TestTube } from '@lucide/svelte'
   import Input from '$lib/components/ui/input/input.svelte'
   import Button from '$lib/components/ui/button/button.svelte'
+  import axios from 'axios'
+  import { onMount } from 'svelte'
+  import { API_URL, DEBUG } from '$lib/vars'
+  import SkeletonText from '$lib/components/skeleton-text.svelte'
 
   function handleKeydown(e: KeyboardEvent) {
     if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
@@ -16,6 +20,37 @@
       }
     }
   }
+
+  let nOptions: number = $state(0)
+  let nPackages: number = $state(0)
+  let lastUpdated: string = $state('')
+  let version: string = $state('')
+
+  onMount(async () => {
+    axios
+      .get(`${API_URL}/stats`)
+      .then((response) => {
+        if (response.status === 200) {
+          if (DEBUG) {
+            console.log('Response data:', response.data)
+          }
+          nOptions =
+            parseInt(response.data['nixos-length']) +
+            parseInt(response.data['homemanager-length']) +
+            parseInt(response.data['darwin-length'])
+          nPackages =
+            parseInt(response.data['nixpkgs-length']) +
+            parseInt(response.data['nur-length'])
+          lastUpdated = response.data['last-updated']
+          version = response.data['version']
+        } else {
+          console.error('Error fetching data:', response.statusText)
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error)
+      })
+  })
 </script>
 
 <svelte:document onkeydown={handleKeydown} />
@@ -72,6 +107,20 @@
 
 <main class="w-full h-full flex-1 flex justify-center items-center max-w-xl">
   <h1 class="mb-1">Search NixOS</h1>
+  <p class="font-semibold">
+    {#if nOptions !== 0}
+      {nOptions}
+    {:else}
+      <SkeletonText>26362</SkeletonText>
+    {/if}
+    <span class="text-muted-foreground">options & </span>
+    {#if nPackages !== 0}
+      {nPackages}
+    {:else}
+      <SkeletonText>131774</SkeletonText>
+    {/if}
+    <span class="text-muted-foreground">packages</span>
+  </p>
   <p class="text-center mb-2 text-sm">
     A simple search engine for <strong>NixOS</strong>, <strong>Nixpkgs</strong>,
     <strong>Home Manager</strong>, <strong>NUR</strong> (Nix User Repository)
