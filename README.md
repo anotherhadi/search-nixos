@@ -8,10 +8,10 @@ A lightweight search engine for NixOS, Nixpkgs, Home Manager, Nix-darwin, and NU
 
 ## Features
 
-- **Open source:** Contributions welcome on GitHub.
+- **Open source:** Contributions welcome on GitHub. Open-source frontend and [backend](https://github.com/anotherhadi/search-nixos-api)
 - **Comprehensive search:** Query across major indexes (NixOS, Nixpkgs, Home Manager, etc.).
-- **Self-hostable:** Easily deploy your own instance.
 - **Hosted instance:** A public instance is available at [search-nixos.hadi.diy](https://search-nixos.hadi.diy).
+- **Self-hostable:** Easily deploy your own instance (with netlify or the flake).
 
 ## Installation
 
