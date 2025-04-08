@@ -52,7 +52,7 @@
 
   <div class="flex flex-col gap-5">
     <div>
-      <h4>Version</h4>
+      <h2 class="mt-2">Version</h2>
       {#if version}
         <p class="pl-4">{version}</p>
       {:else}
@@ -63,7 +63,7 @@
     </div>
 
     <div>
-      <h4>Last updated</h4>
+      <h2>Last updated</h2>
       {#if lastUpdated}
         <p class="pl-4">{lastUpdated}</p>
       {:else}
@@ -72,7 +72,7 @@
     </div>
 
     <div>
-      <h4>Query help</h4>
+      <h2>Query help</h2>
       <Table.Root>
         <Table.Header>
           <Table.Row>
@@ -135,7 +135,11 @@
           <Table.Row>
             <Table.Cell class="font-medium">Broken packages</Table.Cell>
             <Table.Cell>?broken</Table.Cell>
-            <Table.Cell>Only show packages marked as broken. See <sup>[2]</sup></Table.Cell>
+            <Table.Cell
+              >Only show packages marked as broken. See <sup
+                class="text-muted-foreground">[2]</sup
+              ></Table.Cell
+            >
           </Table.Row>
           <Table.Row>
             <Table.Cell class="font-medium">Maintainer filter</Table.Cell>
@@ -148,7 +152,7 @@
       </Table.Root>
       <p class="text-muted-foreground text-sm">
         <sup>[1]</sup> Available sources are: nixpkgs, nur, nixos, home-manager,
-        darwin<br/>
+        darwin<br />
         <sup>[2]</sup> Available special queries are: ?broken, ?vulnerable, ?maintainer=username
       </p>
     </div>
