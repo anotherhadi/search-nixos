@@ -41,6 +41,8 @@
     if (!query) return [{ text, highlight: false }]
 
     const words = query
+      .replace('^', '')
+      .replace('$', '')
       .split(/\s+/)
       .filter((word) => word !== 'package' && word !== 'option')
       .filter(Boolean)
