@@ -175,70 +175,72 @@
           {total}
           {total <= 1 ? 'result' : 'results'}
         </p>
-        <div class="justify-center items-center gap-2 mr-4 md:flex hidden">
-          <Button
-            variant="ghost"
-            size="icon"
-            class="h-7 w-7"
-            disabled={page === 1}
-            onclick={() => {
-              page = 1
-              OnSend({
-                resetPage: false,
-              })
-            }}
-          >
-            <ChevronsLeft />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            class="h-7 w-7"
-            disabled={page === 1}
-            onclick={() => {
-              page -= 1
-              OnSend({
-                resetPage: false,
-              })
-            }}
-          >
-            <ChevronLeft />
-          </Button>
+        {#if totalPages > 1}
+          <div class="justify-center items-center gap-2 mr-4 md:flex hidden">
+            <Button
+              variant="ghost"
+              size="icon"
+              class="h-7 w-7"
+              disabled={page === 1}
+              onclick={() => {
+                page = 1
+                OnSend({
+                  resetPage: false,
+                })
+              }}
+            >
+              <ChevronsLeft />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              class="h-7 w-7"
+              disabled={page === 1}
+              onclick={() => {
+                page -= 1
+                OnSend({
+                  resetPage: false,
+                })
+              }}
+            >
+              <ChevronLeft />
+            </Button>
 
-          <p class="text-sm text-muted-foreground">
-            Page {page} of {totalPages}
-          </p>
+            <p class="text-sm text-muted-foreground">
+              Page {page} of {totalPages}
+            </p>
 
-          <Button
-            variant="ghost"
-            size="icon"
-            class="h-7 w-7"
-            disabled={page === totalPages}
-            onclick={() => {
-              page += 1
-              OnSend({
-                resetPage: false,
-              })
-            }}
-          >
-            <ChevronRight />
-          </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              class="h-7 w-7"
+              disabled={page === totalPages}
+              onclick={() => {
+                page += 1
+                OnSend({
+                  resetPage: false,
+                })
+              }}
+            >
+              <ChevronRight />
+            </Button>
 
-          <Button
-            variant="ghost"
-            size="icon"
-            class="h-7 w-7"
-            disabled={page === totalPages}
-            onclick={() => {
-              page = totalPages
-              OnSend({
-                resetPage: false,
-              })
-            }}
-          >
-            <ChevronsRight />
-          </Button>
-        </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              class="h-7 w-7"
+              disabled={page === totalPages}
+              onclick={() => {
+                page = totalPages
+                OnSend({
+                  resetPage: false,
+                })
+              }}
+            >
+              <ChevronsRight />
+            </Button>
+          </div>
+        {/if}
       </div>
       <div class="border rounded">
         {#each results as result}
@@ -313,70 +315,72 @@
           {total}
           {total <= 1 ? 'result' : 'results'}
         </p>
-        <div class="justify-center items-center gap-2 mr-4 flex">
-          <Button
-            variant="ghost"
-            size="icon"
-            class="h-7 w-7"
-            disabled={page === 1}
-            onclick={() => {
-              page = 1
-              OnSend({
-                resetPage: false,
-              })
-            }}
-          >
-            <ChevronsLeft />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            class="h-7 w-7"
-            disabled={page === 1}
-            onclick={() => {
-              page -= 1
-              OnSend({
-                resetPage: false,
-              })
-            }}
-          >
-            <ChevronLeft />
-          </Button>
+        {#if totalPages > 1}
+          <div class="justify-center items-center gap-2 mr-4 flex">
+            <Button
+              variant="ghost"
+              size="icon"
+              class="h-7 w-7"
+              disabled={page === 1}
+              onclick={() => {
+                page = 1
+                OnSend({
+                  resetPage: false,
+                })
+              }}
+            >
+              <ChevronsLeft />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              class="h-7 w-7"
+              disabled={page === 1}
+              onclick={() => {
+                page -= 1
+                OnSend({
+                  resetPage: false,
+                })
+              }}
+            >
+              <ChevronLeft />
+            </Button>
 
-          <p class="text-sm text-muted-foreground">
-            Page {page} of {totalPages}
-          </p>
+            <p class="text-sm text-muted-foreground">
+              Page {page} of {totalPages}
+            </p>
 
-          <Button
-            variant="ghost"
-            size="icon"
-            class="h-7 w-7"
-            disabled={page === totalPages}
-            onclick={() => {
-              page += 1
-              OnSend({
-                resetPage: false,
-              })
-            }}
-          >
-            <ChevronRight />
-          </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              class="h-7 w-7"
+              disabled={page === totalPages}
+              onclick={() => {
+                page += 1
+                OnSend({
+                  resetPage: false,
+                })
+              }}
+            >
+              <ChevronRight />
+            </Button>
 
-          <Button
-            variant="ghost"
-            size="icon"
-            class="h-7 w-7"
-            disabled={page === totalPages}
-            onclick={() => {
-              page = totalPages
-              OnSend({
-                resetPage: false,
-              })
-            }}
-          >
-            <ChevronsRight />
-          </Button>
-        </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              class="h-7 w-7"
+              disabled={page === totalPages}
+              onclick={() => {
+                page = totalPages
+                OnSend({
+                  resetPage: false,
+                })
+              }}
+            >
+              <ChevronsRight />
+            </Button>
+          </div>
+        {/if}
       </div>
     {/if}
   </div>
