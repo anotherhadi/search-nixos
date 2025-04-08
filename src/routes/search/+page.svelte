@@ -40,6 +40,9 @@
   ): { text: string; highlight: boolean }[] {
     if (!query) return [{ text, highlight: false }]
 
+    text = text.replaceAll('<', '&lt;')
+    text = text.replaceAll('>', '&gt;')
+
     const words = query
       .replace('^', '')
       .replace('$', '')
@@ -279,7 +282,10 @@
                         {#if result.Vulnerable}
                           <Bug class="size-5 text-orange-500" />
                         {/if}
-                        <a href="/{result.Source}/{result.Type}/{result.Key}">
+                        <a
+                          href="/{result.Source}/{result.Type}/{result.Key}"
+                          class="hover:no-underline"
+                        >
                           {@html highlightSegments(
                             result.Key,
                             confirmedSearchText,
