@@ -53,6 +53,10 @@
   })
 </script>
 
+<svelte:head>
+  <meta name="robots" content="index, follow">
+</svelte:head>
+
 <svelte:document onkeydown={handleKeydown} />
 
 <nav class="w-full h-24 border-b px-8 py-4 flex justify-between items-center">
