@@ -5,7 +5,11 @@
   import { onMount } from 'svelte'
   import Button from '$lib/components/ui/button/button.svelte'
   import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte'
-  import { searchHistory, searchText, isSearchHistoryActive } from '$lib/stores/search'
+  import {
+    searchHistory,
+    searchText,
+    isSearchHistoryActive,
+  } from '$lib/stores/search'
   import { replaceState } from '$app/navigation'
   import Navigation from '$lib/components/navigation.svelte'
   import {
@@ -19,13 +23,15 @@
   } from '@lucide/svelte'
   import { API_URL, DEBUG } from '$lib/vars'
   import BadgeCustom from '$lib/components/badge-custom.svelte'
+  import SkeletonText from '$lib/components/skeleton-text.svelte'
+  import SidebarMenuSkeleton from '$lib/components/ui/sidebar/sidebar-menu-skeleton.svelte'
 
   let results: any[] = $state([])
   let page: number = $state(1)
   let perPage: number = $state(20)
   let total: number = $state(0)
   let totalPages: number = $state(0)
-  let loading: boolean = $state(false)
+  let loading: boolean = $state(true)
   let confirmedSearchText: string = $state('')
 
   function highlightSegments(
@@ -63,20 +69,22 @@
   }
 
   async function OnSend({ resetPage = true }: { resetPage?: boolean } = {}) {
+    loading = true
     confirmedSearchText = $searchText
     if ($searchText === '') {
+      loading = false
       return
     }
     if ($searchText.length < 1) {
+      loading = false
       toast.error('Query must be at least 1 characters long')
       return
     }
-    loading = true
     if ($isSearchHistoryActive) {
-    searchHistory.update((searchHistory) => {
-      const updated = [$searchText, ...searchHistory]
-      return updated.slice(0, 100)
-    })
+      searchHistory.update((searchHistory) => {
+        const updated = [$searchText, ...searchHistory]
+        return updated.slice(0, 100)
+      })
     }
     let url = `${API_URL}/search?q=` + encodeURIComponent($searchText)
     if (!isNaN(page) && page > 1) {
@@ -158,17 +166,7 @@
 
 <main>
   <div>
-    {#if loading}
-      <Skeleton class="w-32 h-4 ml-4 mb-2" />
-      <div class="border rounded">
-        {#each [...Array(10)] as _}
-          <div class="px-4 py-4 border-b">
-            <Skeleton class="w-52 h-4 mb-2" />
-            <Skeleton class="w-2/3 h-4" />
-          </div>
-        {/each}
-      </div>
-    {:else if results.length === 0}
+    {#if !loading && results.length === 0}
       <div class="w-full h-full flex justify-center items-center">
         <p class="text-muted-foreground">No results found</p>
       </div>
@@ -177,9 +175,13 @@
         class="w-full my-2 flex justify-between items-center flex-wrap gap-2"
       >
         <p class="text-muted-foreground ml-4">
-          {results.length} of
-          {total}
-          {total <= 1 ? 'result' : 'results'}
+          {#if !loading}
+            {results.length} of
+            {total}
+            {total <= 1 ? 'result' : 'results'}
+          {:else}
+            <SkeletonText>20 of 30 results</SkeletonText>
+          {/if}
         </p>
         {#if totalPages > 1}
           <div class="justify-center items-center gap-2 mr-4 md:flex hidden">
@@ -249,77 +251,112 @@
         {/if}
       </div>
       <div class="border rounded">
-        {#each results as result}
-          <div
-            class=""
-            role="tooltip"
-            onmouseenter={() => (result.hovered = true)}
-            onmouseleave={() => (result.hovered = false)}
-          >
-            <div class="px-4 py-4 border-b">
-              <div class="flex justify-start items-center gap-2">
-                <div
-                  class="flex w-full justify-between flex-wrap flex-col md:flex-row gap-1"
-                >
-                  <div class="flex gap-2 items-center">
-                    <p
-                      class="text-xl flex gap-1 items-center text-primary font-semibold p-0 m-0 break-all [overflow-wrap:anywhere]"
-                    >
-                      {#if result.Broken}
-                        <TriangleAlert class="size-5 text-destructive" />
-                      {/if}
-                      {#if result.Insecure}
-                        <ShieldAlert class="size-5 text-yellow-500" />
-                      {/if}
-                      {#if result.Vulnerable}
-                        <Bug class="size-5 text-orange-500" />
-                      {/if}
-                      <a href="/{result.Source}/{result.Type}/{result.Key}">
-                        {@html highlightSegments(
-                          result.Key,
-                          confirmedSearchText,
-                        )
-                          .map((seg) =>
-                            seg.highlight
-                              ? `<span class="underline">${seg.text}</span>`
-                              : seg.text,
-                          )
-                          .join('')}
-                      </a>
-                    </p>
-
-                    {#if result.hovered}
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        class="text-sm text-muted-foreground h-7 w-7"
-                        onclick={() => CopyToClipboard(result.Key)}
+        {#if !loading}
+          {#each results as result}
+            <div
+              class=""
+              role="tooltip"
+              onmouseenter={() => (result.hovered = true)}
+              onmouseleave={() => (result.hovered = false)}
+            >
+              <div class="px-4 py-4 border-b">
+                <div class="flex justify-start items-center gap-2">
+                  <div
+                    class="flex w-full justify-between flex-wrap flex-col md:flex-row gap-1"
+                  >
+                    <div class="flex gap-2 items-center">
+                      <p
+                        class="text-xl flex gap-1 items-center text-primary font-semibold p-0 m-0 break-all [overflow-wrap:anywhere]"
                       >
-                        <Clipboard />
-                      </Button>
-                    {/if}
-                  </div>
-                  <div>
-                    <BadgeCustom name={result.Source} />
-                    <BadgeCustom name={result.Type} />
+                        {#if result.Broken}
+                          <TriangleAlert class="size-5 text-destructive" />
+                        {/if}
+                        {#if result.Insecure}
+                          <ShieldAlert class="size-5 text-yellow-500" />
+                        {/if}
+                        {#if result.Vulnerable}
+                          <Bug class="size-5 text-orange-500" />
+                        {/if}
+                        <a href="/{result.Source}/{result.Type}/{result.Key}">
+                          {@html highlightSegments(
+                            result.Key,
+                            confirmedSearchText,
+                          )
+                            .map((seg) =>
+                              seg.highlight
+                                ? `<span class="underline">${seg.text}</span>`
+                                : seg.text,
+                            )
+                            .join('')}
+                        </a>
+                      </p>
+
+                      {#if result.hovered}
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          class="text-sm text-muted-foreground h-7 w-7"
+                          onclick={() => CopyToClipboard(result.Key)}
+                        >
+                          <Clipboard />
+                        </Button>
+                      {/if}
+                    </div>
+                    <div>
+                      <BadgeCustom name={result.Source} />
+                      <BadgeCustom name={result.Type} />
+                    </div>
                   </div>
                 </div>
+                <p class="whitespace-nowrap overflow-ellipsis overflow-hidden">
+                  {result.Description}
+                </p>
               </div>
-              <p class="whitespace-nowrap overflow-ellipsis overflow-hidden">
-                {result.Description}
-              </p>
             </div>
-          </div>
-        {/each}
+          {/each}
+        {:else}
+          {#each Array.from({ length: 20 }) as _}
+            <div class="" role="tooltip">
+              <div class="px-4 py-4 border-b">
+                <div class="flex justify-start items-center gap-2">
+                  <div
+                    class="flex w-full justify-between flex-wrap flex-col md:flex-row gap-1"
+                  >
+                    <div class="flex gap-2 items-center">
+                      <p
+                        class="text-xl flex gap-1 items-center text-primary font-semibold p-0 m-0 break-all [overflow-wrap:anywhere]"
+                      >
+                        <SkeletonText>kitty-themes</SkeletonText>
+                      </p>
+                    </div>
+                    <div>
+                      <BadgeCustom name="----" />
+                      <BadgeCustom name="----" />
+                    </div>
+                  </div>
+                </div>
+                <p class="whitespace-nowrap overflow-ellipsis overflow-hidden">
+                  <SkeletonText>
+                    Themes for the kitty terminal emulator
+                  </SkeletonText>
+                </p>
+              </div>
+            </div>
+          {/each}
+        {/if}
       </div>
 
       <div
         class="w-full my-2 flex justify-between items-center flex-wrap gap-2"
       >
         <p class="text-muted-foreground ml-4">
-          {results.length} of
-          {total}
-          {total <= 1 ? 'result' : 'results'}
+          {#if !loading}
+            {results.length} of
+            {total}
+            {total <= 1 ? 'result' : 'results'}
+          {:else}
+            <SkeletonText>20 of 30 results</SkeletonText>
+          {/if}
         </p>
         {#if totalPages > 1}
           <div class="justify-center items-center gap-2 mr-4 flex">
