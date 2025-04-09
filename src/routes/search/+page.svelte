@@ -87,6 +87,10 @@
     }
     if ($isSearchHistoryActive) {
       searchHistory.update((searchHistory) => {
+        // remove duplicates
+        searchHistory = searchHistory.filter(
+          (item) => item !== $searchText,
+        )
         const updated = [$searchText, ...searchHistory]
         return updated.slice(0, 100)
       })
