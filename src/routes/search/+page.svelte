@@ -88,9 +88,7 @@
     if ($isSearchHistoryActive) {
       searchHistory.update((searchHistory) => {
         // remove duplicates
-        searchHistory = searchHistory.filter(
-          (item) => item !== $searchText,
-        )
+        searchHistory = searchHistory.filter((item) => item !== $searchText)
         const updated = [$searchText, ...searchHistory]
         return updated.slice(0, 100)
       })
@@ -316,7 +314,7 @@
                         </Button>
                       {/if}
                     </div>
-                    <div>
+                    <div class="flex gap-2">
                       <BadgeCustom name={result.Source} />
                       <BadgeCustom name={result.Type} />
                     </div>
