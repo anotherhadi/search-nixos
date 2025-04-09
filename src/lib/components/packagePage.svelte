@@ -59,7 +59,7 @@
     formatted = formatted.replace(
       /<((https?:\/\/)[^>]+)>/g,
       (_match, url) =>
-        `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-blue-600 underline">${url.replace('https://', '')}</a>`,
+        `<a href="${url}" target="_blank" rel="noopener noreferrer">${url.replace('https://', '')}</a>`,
     )
     return formatted
   }
