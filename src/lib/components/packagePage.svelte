@@ -15,7 +15,7 @@
   import { searchText } from '$lib/stores/search'
   import { replaceState } from '$app/navigation'
   import Codeblock from './codeblock.svelte'
-  import { CircleAlert } from '@lucide/svelte'
+  import { Bug, CircleAlert } from '@lucide/svelte'
   import { API_URL, DEBUG } from '$lib/vars'
   import { SiApple, SiFreebsd, SiLinux } from '@icons-pack/svelte-simple-icons'
   import SkeletonText from './skeleton-text.svelte'
@@ -62,6 +62,13 @@
         `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-blue-600 underline">${url.replace('https://', '')}</a>`,
     )
     return formatted
+  }
+
+  const findCveLink = (text: string) => {
+    // Parse the text to find CVE IDs and create links
+    const cveRegex = /CVE-\d{4}-\d{4,7}/g
+    const cveMatches = text.match(cveRegex)
+    return cveMatches || []
   }
 </script>
 
@@ -214,6 +221,18 @@
                   <CircleAlert class="size-4" />
                   <Alert.Description class="text-wrap">{item}</Alert.Description
                   >
+                  <p
+                    class="text-sm text-muted-foreground flex gap-2 items-center my-2"
+                  >
+                    <Bug />
+                    {#each findCveLink(item) as cve}
+                      <a
+                        href={`https://cve.mitre.org/cgi-bin/cvename.cgi?name=${cve}`}
+                        target="_blank"
+                        rel="noopener noreferrer">{cve}</a
+                      >
+                    {/each}
+                  </p>
                 </Alert.Root>
               {/each}
             </div>
