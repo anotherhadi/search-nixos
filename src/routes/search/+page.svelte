@@ -290,7 +290,7 @@
                         {/if}
                         <a
                           href="/{result.Source}/{result.Type}/{result.Key}"
-                          class="hover:no-underline hover:opacity-70"
+                          class="hover:no-underline md:hover:opacity-70"
                         >
                           {@html highlightSegments(
                             result.Key,
