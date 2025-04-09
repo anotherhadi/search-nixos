@@ -6,8 +6,8 @@
   import * as Table from '$lib/components/ui/table/index.js'
   import { searchText } from '$lib/stores/search'
   import { API_URL, DEBUG } from '$lib/vars'
-  import axios from 'axios'
   import { onMount } from 'svelte'
+  import axios from '$lib/api'
 
   let nOptions: number = $state(0)
   let nPackages: number = $state(0)

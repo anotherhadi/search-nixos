@@ -1,6 +1,5 @@
 <script lang="ts">
   import Clipboard from '@lucide/svelte/icons/clipboard'
-  import axios from 'axios'
   import { toast } from 'svelte-sonner'
   import { onMount } from 'svelte'
   import Button from '$lib/components/ui/button/button.svelte'
@@ -9,7 +8,7 @@
     searchText,
     isSearchHistoryActive,
   } from '$lib/stores/search'
-  import { replaceState } from '$app/navigation'
+  import { pushState, replaceState } from '$app/navigation'
   import Navigation from '$lib/components/navigation.svelte'
   import {
     Bug,
@@ -23,6 +22,7 @@
   import { API_URL, DEBUG } from '$lib/vars'
   import BadgeCustom from '$lib/components/badge-custom.svelte'
   import SkeletonText from '$lib/components/skeleton-text.svelte'
+  import axios from '$lib/api'
 
   let results: any[] = $state([])
   let page: number = $state(1)
@@ -101,6 +101,7 @@
     if (resetPage) {
       page = 1
     }
+
     await axios
       .get(url)
       .then((response) => {
@@ -119,15 +120,18 @@
           console.error('Error fetching data:', response.statusText)
           toast.error('Error fetching data: ' + response.statusText)
         }
-        const urlParams = new URLSearchParams(window.location.search)
-        urlParams.set('q', $searchText)
-        replaceState('/search?' + urlParams.toString(), '')
       })
       .catch((error) => {
         console.error('Error fetching data:', error)
         toast.error('Error fetching data: ' + error)
       })
     loading = false
+
+    setTimeout(() => {
+      const urlParams = new URLSearchParams(window.location.search)
+      urlParams.set('q', $searchText)
+      pushState('/search?' + urlParams.toString(), {})
+    }, 100)
   }
 
   function CopyToClipboard(text: string) {
@@ -142,7 +146,7 @@
     )
   }
 
-  onMount(() => {
+  onMount(async () => {
     const urlParams = new URLSearchParams(window.location.search)
     let query = urlParams.get('q') || ''
     if (query.length > 0) {
@@ -163,7 +167,7 @@
       }
     }
 
-    OnSend()
+    await OnSend()
   })
 </script>
 

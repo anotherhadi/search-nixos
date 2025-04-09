@@ -49,6 +49,7 @@
   "dependencies": {
     "@icons-pack/svelte-simple-icons": "^5.0.0",
     "axios": "^1.8.4",
+    "axios-cache-interceptor": "^1.7.0",
     "highlight.js": "^11.11.1",
     "svelte-countup": "^0.2.8",
     "svelte-highlight": "^7.8.3"

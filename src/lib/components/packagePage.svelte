@@ -8,7 +8,6 @@
   import Github from '@lucide/svelte/icons/github'
   import Badge from '$lib/components/ui/badge/badge.svelte'
   import * as Collapsible from '$lib/components/ui/collapsible/index.js'
-  import axios from 'axios'
   import { onMount } from 'svelte'
   import { toast } from 'svelte-sonner'
   import Navigation from './navigation.svelte'
@@ -21,6 +20,7 @@
   import SkeletonText from './skeleton-text.svelte'
   import BadgeCustom from './badge-custom.svelte'
   import CopyUrl from './copy-url.svelte'
+  import axios from '$lib/api'
 
   let prefix: string = $state('') // nixpkgs/package
   let q: string = $state('') // kitty

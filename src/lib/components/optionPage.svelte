@@ -1,6 +1,5 @@
 <script lang="ts">
   import Github from '@lucide/svelte/icons/github'
-  import axios from 'axios'
   import { onMount } from 'svelte'
   import { toast } from 'svelte-sonner'
   import Navigation from './navigation.svelte'
@@ -12,6 +11,7 @@
   import BadgeCustom from './badge-custom.svelte'
   import * as Breadcrumb from '$lib/components/ui/breadcrumb/index.js'
   import CopyUrl from './copy-url.svelte'
+  import axios from '$lib/api'
 
   let prefix: string = $state('') // nixpkgs/package
   let q: string = $state('') // kitty

@@ -4,7 +4,7 @@
   import { History, Search, TestTube } from '@lucide/svelte'
   import Input from '$lib/components/ui/input/input.svelte'
   import Button from '$lib/components/ui/button/button.svelte'
-  import axios from 'axios'
+  import axios from '$lib/api'
   import { onMount } from 'svelte'
   import { API_URL, DEBUG } from '$lib/vars'
   import SkeletonText from '$lib/components/skeleton-text.svelte'
