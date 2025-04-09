@@ -28,6 +28,7 @@
   let version: string = $state('')
 
   onMount(async () => {
+    searchText.set('')
     axios
       .get(`${API_URL}/stats`)
       .then((response) => {
