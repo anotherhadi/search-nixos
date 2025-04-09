@@ -225,11 +225,12 @@
                     <p
                       class="text-sm text-muted-foreground flex gap-2 items-center my-2"
                     >
-                      <Bug />
+                      <Bug class="size-4" />
                       {#each findCveLink(item) as cve}
                         <a
                           href={`https://www.cve.org/CVERecord?id=${cve}`}
                           target="_blank"
+                          class="text-muted-foreground"
                           rel="noopener noreferrer">{cve}</a
                         >
                       {/each}
