@@ -4,7 +4,6 @@
   import { toast } from 'svelte-sonner'
   import { onMount } from 'svelte'
   import Button from '$lib/components/ui/button/button.svelte'
-  import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte'
   import {
     searchHistory,
     searchText,
@@ -24,7 +23,6 @@
   import { API_URL, DEBUG } from '$lib/vars'
   import BadgeCustom from '$lib/components/badge-custom.svelte'
   import SkeletonText from '$lib/components/skeleton-text.svelte'
-  import SidebarMenuSkeleton from '$lib/components/ui/sidebar/sidebar-menu-skeleton.svelte'
 
   let results: any[] = $state([])
   let page: number = $state(1)
@@ -75,7 +73,6 @@
 
   async function OnSend({ resetPage = true }: { resetPage?: boolean } = {}) {
     loading = true
-    confirmedSearchText = $searchText
     if ($searchText === '') {
       loading = false
       return
@@ -85,6 +82,7 @@
       toast.error('Query must be at least 1 characters long')
       return
     }
+    confirmedSearchText = $searchText
     if ($isSearchHistoryActive) {
       searchHistory.update((searchHistory) => {
         // remove duplicates
