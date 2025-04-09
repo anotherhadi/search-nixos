@@ -41,7 +41,15 @@ export function formatTextSafely(text: string, muted: boolean = false): string {
       : '<span class="file-ref"><code>$1</code></span>',
   )
 
-  // Format file references: {var}`x`
+  // Format option references: {option}`x`
+  safeText = safeText.replace(
+    /\{option\}`([^`]+)`/g,
+    muted
+      ? '<span class="option-ref"><code class="!bg-muted/50">$1</code></span>'
+      : '<span class="option-ref"><code>$1</code></span>',
+  )
+
+  // Format var references: {var}`x`
   safeText = safeText.replace(
     /\{var\}`([^`]+)`/g,
     muted
