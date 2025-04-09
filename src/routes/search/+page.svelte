@@ -189,7 +189,9 @@
           {/if}
         </p>
         {#if totalPages > 1}
-          <div class="justify-center sm:justify-end items-center gap-2 sm:flex hidden">
+          <div
+            class="justify-center sm:justify-end items-center gap-2 sm:flex hidden"
+          >
             <Button
               variant="ghost"
               size="icon"
@@ -284,7 +286,7 @@
                         {/if}
                         <a
                           href="/{result.Source}/{result.Type}/{result.Key}"
-                          class="hover:no-underline"
+                          class="hover:no-underline hover:opacity-70"
                         >
                           {@html highlightSegments(
                             result.Key,
