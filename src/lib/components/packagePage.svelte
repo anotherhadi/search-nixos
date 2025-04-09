@@ -135,7 +135,9 @@
         {#if pkg && pkg.homepages.length}
           <div>
             <h4>Homepage</h4>
-            <p class="pl-4">
+            <p
+              class="pl-4 break-all [overflow-wrap:anywhere] flex flex-col gap-2"
+            >
               {#each pkg.homepages as item}
                 <a
                   href={item}
@@ -159,7 +161,7 @@
         {#if pkg && pkg.position}
           <div>
             <h4>Source</h4>
-            <p class="flex gap-2 flex-col pl-4">
+            <p class="pl-4 break-all [overflow-wrap:anywhere]">
               <a
                 href={pkg.positionUrl}
                 target="_blank"
