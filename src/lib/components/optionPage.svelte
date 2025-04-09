@@ -98,7 +98,9 @@
     </div>
 
     <div class="flex items-center justify-between flex-wrap gap-5 w-full">
-      <h1 class="m-0 mb-2 font-semibold break-all [overflow-wrap:anywhere]">
+      <h1
+        class="text-2xl m-0 mb-2 font-semibold break-all [overflow-wrap:anywhere]"
+      >
         {#if q}
           {q}
         {:else}
