@@ -43,7 +43,7 @@
     name="twitter:image"
     content="https://search-nixos.hadi.diy/og-banner.png"
   />
-    <meta name="robots" content="noindex">
+  <meta name="robots" content="noindex" />
 </svelte:head>
 
 <Toaster />

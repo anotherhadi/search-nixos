@@ -27,4 +27,7 @@ function localStorageStore<T>(key: string, initial: T): Writable<T> {
 
 export const expertMode = localStorageStore<boolean>('expertMode', false)
 export const searchHistory = localStorageStore<string[]>('searchHistory', [])
-export const isSearchHistoryActive = localStorageStore<boolean>('isSearchHistoryActive', true)
+export const isSearchHistoryActive = localStorageStore<boolean>(
+  'isSearchHistoryActive',
+  true,
+)
