@@ -292,13 +292,6 @@
                         {/if}
                         <a
                           href="/{result.Source}/{result.Type}/{result.Key}"
-                          onclick={() => {
-                            if (IsMobile) {
-                              goto(
-                                `/${result.Source}/${result.Type}/${result.Key}`,
-                              )
-                            }
-                          }}
                           class="hover:no-underline hover:opacity-70"
                         >
                           {@html highlightSegments(
