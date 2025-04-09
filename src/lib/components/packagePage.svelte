@@ -221,18 +221,20 @@
                   <CircleAlert class="size-4" />
                   <Alert.Description class="text-wrap">{item}</Alert.Description
                   >
-                  <p
-                    class="text-sm text-muted-foreground flex gap-2 items-center my-2"
-                  >
-                    <Bug />
-                    {#each findCveLink(item) as cve}
-                      <a
-                        href={`https://cve.mitre.org/cgi-bin/cvename.cgi?name=${cve}`}
-                        target="_blank"
-                        rel="noopener noreferrer">{cve}</a
-                      >
-                    {/each}
-                  </p>
+                  {#if findCveLink(item).length}
+                    <p
+                      class="text-sm text-muted-foreground flex gap-2 items-center my-2"
+                    >
+                      <Bug />
+                      {#each findCveLink(item) as cve}
+                        <a
+                          href={`https://www.cve.org/CVERecord?id=${cve}`}
+                          target="_blank"
+                          rel="noopener noreferrer">{cve}</a
+                        >
+                      {/each}
+                    </p>
+                  {/if}
                 </Alert.Root>
               {/each}
             </div>
