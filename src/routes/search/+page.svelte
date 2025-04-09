@@ -266,7 +266,7 @@
               onmouseenter={() => (result.hovered = true)}
               onmouseleave={() => (result.hovered = false)}
             >
-              <div class="px-4 py-4 border-b">
+              <div class="px-4 py-4 border-b flex flex-col gap-1">
                 <div class="flex justify-start items-center gap-2">
                   <div
                     class="flex w-full justify-between flex-wrap flex-col md:flex-row gap-1"
@@ -327,7 +327,7 @@
         {:else}
           {#each Array.from({ length: 20 }) as _}
             <div class="" role="tooltip">
-              <div class="px-4 py-4 border-b">
+              <div class="px-4 py-4 border-b flex flex-col gap-1">
                 <div class="flex justify-start items-center gap-2">
                   <div
                     class="flex w-full justify-between flex-wrap flex-col md:flex-row gap-1"
