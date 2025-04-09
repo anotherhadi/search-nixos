@@ -122,12 +122,12 @@
       {#if pkg && pkg.declarations.length}
         <div>
           <h4>Declarations</h4>
-          <p class="pl-4">
+          <p class="pl-4  break-all [overflow-wrap:anywhere]">
             {#each pkg.declarations as item}
               <a
                 href={item}
                 target="_blank"
-                class="flex gap-2 items-center"
+                class="flex gap-2 items-center flex-wrap"
                 rel="noopener noreferrer"
                 ><Github size={16} />
                 {item.replace('https://', '').replace('github.com/', '')}</a
