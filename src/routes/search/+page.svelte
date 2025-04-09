@@ -23,6 +23,7 @@
   import BadgeCustom from '$lib/components/badge-custom.svelte'
   import SkeletonText from '$lib/components/skeleton-text.svelte'
   import axios from '$lib/api'
+  import { formatTextSafely } from '$lib/components/formatText'
 
   let results: any[] = $state([])
   let page: number = $state(1)
@@ -323,7 +324,7 @@
                   </div>
                 </div>
                 <p class="whitespace-nowrap overflow-ellipsis overflow-hidden">
-                  {result.Description}
+                  {@html formatTextSafely(result.Description, true)}
                 </p>
               </div>
             </div>
