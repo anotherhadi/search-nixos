@@ -8,6 +8,7 @@
   import { onMount } from 'svelte'
   import { API_URL, DEBUG } from '$lib/vars'
   import SkeletonText from '$lib/components/skeleton-text.svelte'
+  import Countup from 'svelte-countup'
 
   function handleKeydown(e: KeyboardEvent) {
     if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
@@ -54,7 +55,7 @@
 </script>
 
 <svelte:head>
-  <meta name="robots" content="index, follow">
+  <meta name="robots" content="index, follow" />
 </svelte:head>
 
 <svelte:document onkeydown={handleKeydown} />
@@ -113,13 +114,13 @@
   <h1 class="mb-1">Search NixOS</h1>
   <p class="font-semibold">
     {#if nOptions !== 0}
-      {nOptions}
+      <Countup value={nOptions} duration={1000} step={10} />
     {:else}
       <SkeletonText>26362</SkeletonText>
     {/if}
     <span class="text-muted-foreground">options & </span>
     {#if nPackages !== 0}
-      {nPackages}
+      <Countup value={nPackages} duration={800} step={10} />
     {:else}
       <SkeletonText>131774</SkeletonText>
     {/if}

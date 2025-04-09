@@ -17,6 +17,9 @@ importers:
       highlight.js:
         specifier: ^11.11.1
         version: 11.11.1
+      svelte-countup:
+        specifier: ^0.2.8
+        version: 0.2.8(svelte@5.25.8)
       svelte-highlight:
         specifier: ^7.8.3
         version: 7.8.3
@@ -1835,8 +1838,16 @@ packages:
       svelte: ^4.0.0 || ^5.0.0-next.0
       typescript: '>=5.0.0'
 
+  svelte-countup@0.2.8:
+    resolution: {integrity: sha512-vxxZoA9uzoe5PpGKZQtqeXS2jzFmk0N+4yDeqppciKEL7ERVEra467OitJOB9ZRY8ftcDMP4J6LbHAeFgijrfA==}
+
   svelte-highlight@7.8.3:
     resolution: {integrity: sha512-i4CE/6yda1fCh0ovUVATk1S1feu1y3+CV+l1brgtMPPRO9VTGq+hPpUjVEJWQkE7hPAgwgVpHccoa5M2gpKxYQ==}
+
+  svelte-inview@3.0.4:
+    resolution: {integrity: sha512-dJZMZ7qN+z2lsxHA7mK1vS35qOCfl1BNSs712a2AnulbRm371n2eoaNa5ICVYAViWpj2zCy1XGZllrxJ0Tjp5A==}
+    peerDependencies:
+      svelte: ^3.0.0
 
   svelte-sonner@0.3.28:
     resolution: {integrity: sha512-K3AmlySeFifF/cKgsYNv5uXqMVNln0NBAacOYgmkQStLa/UoU0LhfAACU6Gr+YYC8bOCHdVmFNoKuDbMEsppJg==}
@@ -3693,9 +3704,20 @@ snapshots:
     transitivePeerDependencies:
       - picomatch
 
+  svelte-countup@0.2.8(svelte@5.25.8):
+    dependencies:
+      nanoid: 3.3.11
+      svelte-inview: 3.0.4(svelte@5.25.8)
+    transitivePeerDependencies:
+      - svelte
+
   svelte-highlight@7.8.3:
     dependencies:
       highlight.js: 11.11.1
+
+  svelte-inview@3.0.4(svelte@5.25.8):
+    dependencies:
+      svelte: 5.25.8
 
   svelte-sonner@0.3.28(svelte@5.25.8):
     dependencies:
