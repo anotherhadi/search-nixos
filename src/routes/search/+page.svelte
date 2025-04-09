@@ -8,7 +8,7 @@
     searchText,
     isSearchHistoryActive,
   } from '$lib/stores/search'
-  import { pushState, replaceState } from '$app/navigation'
+  import { goto, pushState, replaceState } from '$app/navigation'
   import Navigation from '$lib/components/navigation.svelte'
   import {
     Bug,
@@ -24,6 +24,7 @@
   import SkeletonText from '$lib/components/skeleton-text.svelte'
   import axios from '$lib/api'
   import { formatTextSafely } from '$lib/components/formatText'
+  import { IsMobile } from '$lib/hooks/is-mobile.svelte'
 
   let results: any[] = $state([])
   let page: number = $state(1)
@@ -291,7 +292,14 @@
                         {/if}
                         <a
                           href="/{result.Source}/{result.Type}/{result.Key}"
-                          class="hover:no-underline md:hover:opacity-70"
+                          onclick={() => {
+                            if (IsMobile) {
+                              goto(
+                                `/${result.Source}/${result.Type}/${result.Key}`,
+                              )
+                            }
+                          }}
+                          class="hover:no-underline hover:opacity-70"
                         >
                           {@html highlightSegments(
                             result.Key,
