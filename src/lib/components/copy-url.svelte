@@ -1,7 +1,7 @@
 <script lang="ts">
   import { toast } from 'svelte-sonner'
   import Button from './ui/button/button.svelte'
-  import { Check, ExternalLink } from '@lucide/svelte'
+  import { ClipboardCheck, Clipboard } from '@lucide/svelte'
 
   let clicked = $state(false)
 </script>
@@ -25,8 +25,8 @@
   }}
 >
   {#if clicked}
-    <Check />
+    <ClipboardCheck />
   {:else}
-    <ExternalLink />
+    <Clipboard />
   {/if}
 </Button>
